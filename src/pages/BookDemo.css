@@ -1,0 +1,220 @@
+/* ── BookDemo page ─────────────────────────────────────────────── */
+
+.book-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+}
+.book-bg-overlay {
+  position: absolute; inset: 0;
+  background: rgba(2,11,24,0.58);
+}
+
+.book-main {
+  position: relative; z-index: 2;
+  padding: 120px 0 80px;
+  min-height: 100vh;
+}
+
+/* header */
+.book-header {
+  text-align: center; margin-bottom: 40px;
+}
+.book-h1 {
+  font-size: clamp(36px, 5vw, 68px);
+  line-height: 1.05; letter-spacing: -0.03em; font-weight: 700;
+  margin: 20px auto 18px; max-width: 18ch;
+  color: rgba(255,255,255,0.94);
+}
+.book-h1 .accent {
+  background: linear-gradient(90deg, #93c5fd, #3B82F6, #6366f1, #F26522, #fb923c, #3B82F6, #93c5fd);
+  background-size: 300% 100%;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  animation: heroAccentFlow 5s ease infinite;
+}
+.book-sub {
+  max-width: 580px; margin: 0 auto; font-size: 17px; line-height: 1.6;
+  color: rgba(255,255,255,0.6);
+}
+
+/* expect strip */
+.book-expect {
+  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+.expect-item {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px; border-radius: 999px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
+  font-size: 13px; color: rgba(255,255,255,0.75);
+  backdrop-filter: blur(10px);
+}
+.expect-ico { font-size: 15px; }
+
+/* grid */
+.book-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* card inner */
+.book-card-inner {
+  padding: 36px; height: 100%;
+  display: flex; flex-direction: column; gap: 24px;
+}
+
+.book-card-head {
+  display: flex; flex-direction: column; gap: 20px;
+}
+.book-card-label {
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  font-weight: 700; color: var(--blue-bright);
+  padding: 5px 12px; border-radius: 999px;
+  background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.28);
+  display: inline-block; margin-bottom: 4px;
+}
+.book-card-label-orange {
+  color: var(--orange);
+  background: rgba(242,101,34,0.1); border-color: rgba(242,101,34,0.28);
+}
+.book-card-title {
+  font-size: clamp(22px, 2.5vw, 30px); margin: 0 0 8px;
+  font-weight: 700; letter-spacing: -0.02em; line-height: 1.15;
+}
+.book-card-desc {
+  font-size: 14px; color: var(--muted); line-height: 1.6; margin: 0;
+}
+.book-card-features {
+  display: flex; flex-direction: column; gap: 8px;
+  padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.07);
+}
+.book-feature {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: rgba(255,255,255,0.75);
+}
+.chk-sm {
+  width: 16px; height: 16px; border-radius: 5px; flex-shrink: 0;
+  background: rgba(59,130,246,0.18); border: 1px solid rgba(59,130,246,0.4);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--blue-bright);
+}
+.chk-orange {
+  background: rgba(242,101,34,0.15); border-color: rgba(242,101,34,0.4);
+  color: var(--orange);
+}
+
+/* Calendly embed */
+.calendly-wrap {
+  border-radius: 16px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(2,11,24,0.6);
+  margin: 0 -4px; /* subtle bleed */
+}
+.book-calendly-card .border-glow-inner {
+  overflow: visible !important; /* let glow show */
+}
+
+/* Contact form */
+.contact-form {
+  display: flex; flex-direction: column; gap: 16px;
+}
+.form-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.form-group {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.form-label {
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.6);
+  letter-spacing: 0.04em;
+}
+.form-input,
+.form-select,
+.form-textarea {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px; color: #fff;
+  font-family: inherit;
+  transition: border-color .2s, background .2s, box-shadow .2s;
+  outline: none;
+  width: 100%;
+}
+.form-input::placeholder,
+.form-textarea::placeholder { color: rgba(255,255,255,0.28); }
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: rgba(59,130,246,0.55);
+  background: rgba(59,130,246,0.06);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+}
+.form-select {
+  cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.4)' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+.form-select option { background: #0a1628; color: #fff; }
+.form-textarea { resize: vertical; min-height: 120px; }
+
+.form-submit {
+  width: 100%; justify-content: center; margin-top: 4px;
+}
+.form-fine {
+  font-size: 12px; color: rgba(255,255,255,0.35); text-align: center; margin: 0;
+}
+.form-error {
+  font-size: 13px; color: #f87171; margin: 0;
+}
+.form-error a { color: #f87171; text-decoration: underline; }
+
+/* spinner */
+.spinner {
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.25);
+  border-top-color: #fff;
+  animation: spin .7s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* success state */
+.form-success {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 12px; padding: 32px 16px; flex: 1;
+  justify-content: center;
+}
+.form-success-icon {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3);
+  display: flex; align-items: center; justify-content: center;
+}
+.form-success h3 { margin: 0; font-size: 22px; font-weight: 700; }
+.form-success p { color: var(--muted); font-size: 14px; line-height: 1.6; margin: 0; max-width: 28ch; }
+.form-success a { color: var(--blue-bright); }
+
+/* footer */
+.book-footer {
+  position: relative; z-index: 2;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding: 32px 0 48px;
+  color: rgba(255,255,255,0.4); font-size: 13px;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .book-grid { grid-template-columns: 1fr; }
+  .book-card-inner { padding: 28px; }
+}
+@media (max-width: 640px) {
+  .book-main { padding: 100px 0 60px; }
+  .book-h1 { font-size: clamp(30px, 8vw, 44px); }
+  .book-sub { font-size: 15px; }
+  .form-row { grid-template-columns: 1fr; }
+  .book-card-inner { padding: 20px; }
+  .book-expect { gap: 8px; }
+  .expect-item { font-size: 12px; }
+}
