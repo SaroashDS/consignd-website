@@ -252,7 +252,8 @@ export default function App() {
     const root = cinematicRef.current
     if (!root) return undefined
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReduced) return undefined
+    const isMobile = window.matchMedia('(max-width: 768px)').matches
+    if (prefersReduced || isMobile) return undefined
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({

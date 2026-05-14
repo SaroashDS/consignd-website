@@ -861,7 +861,31 @@ footer { border-top: 1px solid var(--glass-bd); padding: 42px 0 58px; color: var
 
 @media (max-width: 640px) {
   section { padding: 80px 0; }
-  .hero { padding: 120px 20px 80px; }
+  .hero { min-height: auto; padding: 120px 20px 80px; }
+  .hero-eyebrow {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 14px;
+    font-size: 10px;
+    line-height: 1.5;
+    letter-spacing: 0.12em;
+    white-space: normal;
+    text-align: left;
+    overflow-wrap: anywhere;
+  }
+  .hero-eyebrow::before { display: none; }
+  .hero-eyebrow .dot { margin-top: 5px; flex-shrink: 0; }
+  .section-eyebrow {
+    max-width: 100%;
+    white-space: normal;
+    text-align: left;
+    line-height: 1.45;
+    letter-spacing: 0.12em;
+  }
   .hero h1 { font-size: clamp(38px, 10vw, 60px); }
   .hero p.sub { font-size: 16px; }
   .hero-ctas { flex-direction: column; align-items: center; }
@@ -882,7 +906,7 @@ footer { border-top: 1px solid var(--glass-bd); padding: 42px 0 58px; color: var
   .pipe-card-inner { padding: 24px; }
   .ai-col-inner { padding: 24px; }
   .trust-col-inner { padding: 24px; }
-  .voice { width: 300px; }
+  .voice { width: min(300px, calc(100vw - 56px)); }
   h2 { font-size: clamp(28px, 7vw, 44px); }
   .floaters { display: none; }
   .foot { flex-direction: column; text-align: center; gap: 20px; }
@@ -1160,11 +1184,36 @@ footer { border-top: 1px solid var(--glass-bd); padding: 42px 0 58px; color: var
   .cin-beam { left: 260px; width: 150px; }
 }
 @media (max-width: 640px) {
-  .cin-stage { min-height: 760px; }
-  .cin-doc-stack { left: 22px; top: 34px; transform: scale(.88); transform-origin: top left; }
-  .cin-record { left: 22px; right: 22px; top: 335px; width: auto; }
+  .cinematic { padding: 80px 0; }
+  .cin-wrap { gap: 24px; }
+  .cin-stage {
+    min-height: auto;
+    padding: 22px;
+    border-radius: 24px;
+  }
+  .cin-doc-stack,
+  .cin-record,
+  .cin-review {
+    position: relative;
+    inset: auto;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: 100%;
+    transform: none;
+  }
+  .cin-doc-stack {
+    display: grid;
+    gap: 12px;
+    height: auto;
+    margin-bottom: 18px;
+  }
+  .cin-doc { position: relative; top: auto; left: auto; right: auto; width: 100%; min-height: auto; }
+  .cin-doc-1, .cin-doc-2, .cin-doc-3 { top: auto; }
+  .cin-record { margin-bottom: 18px; }
   .cin-beam { display: none; }
-  .cin-review { left: 22px; right: 22px; bottom: 26px; }
+  .cin-review { margin-top: 0; }
 }
 
 /* ---------- Manual chaos scroll story ---------- */
