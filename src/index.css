@@ -901,9 +901,7 @@ footer { border-top: 1px solid var(--glass-bd); padding: 42px 0 58px; color: var
 .bg-grid,
 .bg-blob,
 .aurora,
-.doc,
-.voices-track,
-.marquee-track {
+.doc {
   animation: none !important;
   will-change: auto;
 }
