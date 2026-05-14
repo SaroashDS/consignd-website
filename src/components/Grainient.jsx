@@ -107,6 +107,7 @@ const Grainient = ({
   grainAmount = 0.1,
   grainScale = 2.0,
   grainAnimated = false,
+  animated = true,
   contrast = 1.5,
   gamma = 1.0,
   saturation = 1.0,
@@ -189,15 +190,21 @@ const Grainient = ({
 
     let raf = 0;
     const t0 = performance.now();
-    const loop = t => {
-      program.uniforms.iTime.value = (t - t0) * 0.001;
-      renderer.render({ scene: mesh });
+
+    if (animated) {
+      const loop = t => {
+        program.uniforms.iTime.value = (t - t0) * 0.001;
+        renderer.render({ scene: mesh });
+        raf = requestAnimationFrame(loop);
+      };
       raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
+    } else {
+      program.uniforms.iTime.value = 0;
+      renderer.render({ scene: mesh });
+    }
 
     return () => {
-      cancelAnimationFrame(raf);
+      if (raf) cancelAnimationFrame(raf);
       ro.disconnect();
       if (container.contains(canvas)) {
         container.removeChild(canvas);
@@ -206,7 +213,7 @@ const Grainient = ({
   }, [
     timeSpeed, colorBalance, warpStrength, warpFrequency, warpSpeed,
     warpAmplitude, blendAngle, blendSoftness, rotationAmount, noiseScale,
-    grainAmount, grainScale, grainAnimated, contrast, gamma, saturation,
+    grainAmount, grainScale, grainAnimated, animated, contrast, gamma, saturation,
     centerX, centerY, zoom, color1, color2, color3
   ]);
 

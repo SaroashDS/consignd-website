@@ -5,11 +5,9 @@ import { SpeedInsights } from '@vercel/speed-insights/react'
 import './index.css'
 import App from './App.jsx'
 import BookDemo from './pages/BookDemo.jsx'
-import SmoothScroll from './components/SmoothScroll.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <SmoothScroll />
     <HashRouter>
       <Routes>
         <Route path="/" element={<App />} />
