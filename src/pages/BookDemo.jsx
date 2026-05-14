@@ -10,7 +10,8 @@ import './BookDemo.css'
 const CALENDLY_URL = 'https://calendly.com/operations-consignd/30min'
 
 /* ─── Update this to your team email (used as mailto fallback) ─── */
-const TEAM_EMAIL = 'team@consignd.com'
+const TEAM_EMAIL = 'website.inquiries@consignd.one'
+const CONTACT_ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT || 'https://project-qay72.vercel.app/api/contact'
 
 /* ─── Check icon ────────────────────────────────────────────────── */
 const CheckIcon = () => (
@@ -21,27 +22,40 @@ const CheckIcon = () => (
 
 /* ─── Contact form ──────────────────────────────────────────────── */
 function ContactForm() {
-  const [form, setForm] = useState({ name: '', company: '', email: '', loads: '', message: '' })
+  const emptyForm = { name: '', company: '', email: '', loads: '', message: '', website: '' }
+  const [form, setForm] = useState(emptyForm)
   const [status, setStatus] = useState('idle') // idle | sending | sent | error
+  const [errorMessage, setErrorMessage] = useState('')
+  const [submittedAt, setSubmittedAt] = useState(() => Date.now())
 
   const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }))
+
+  const resetForm = () => {
+    setForm(emptyForm)
+    setSubmittedAt(Date.now())
+    setErrorMessage('')
+    setStatus('idle')
+  }
 
   const handleSubmit = async e => {
     e.preventDefault()
     setStatus('sending')
+    setErrorMessage('')
     try {
-      /* TODO: replace with your email endpoint (Formspree, EmailJS, Resend, etc.)
-         Example with Formspree:
-           const res = await fetch('https://formspree.io/f/YOUR_ID', {
-             method: 'POST',
-             headers: { 'Content-Type': 'application/json' },
-             body: JSON.stringify(form),
-           })
-           if (!res.ok) throw new Error()
-      */
-      await new Promise(r => setTimeout(r, 900)) // remove when wired
+      const res = await fetch(CONTACT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...form, submittedAt }),
+      })
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data?.error || 'Request failed')
+      }
+
       setStatus('sent')
-    } catch {
+    } catch (error) {
+      setErrorMessage(error?.message || 'Something went wrong.')
       setStatus('error')
     }
   }
@@ -57,7 +71,7 @@ function ContactForm() {
         </div>
         <h3>We'll be in touch.</h3>
         <p>Expect a reply within one business day. In the meantime, feel free to <a href={`mailto:${TEAM_EMAIL}`}>email us directly</a>.</p>
-        <button className="btn btn-ghost" style={{marginTop:'16px'}} onClick={() => { setForm({ name:'',company:'',email:'',loads:'',message:'' }); setStatus('idle') }}>
+        <button className="btn btn-ghost" style={{marginTop:'16px'}} onClick={resetForm}>
           Send another message
         </button>
       </div>
@@ -101,8 +115,18 @@ function ContactForm() {
           onChange={set('message')}
         />
       </div>
+      <input
+        type="text"
+        tabIndex="-1"
+        autoComplete="off"
+        aria-hidden="true"
+        className="sr-only"
+        style={{position:'absolute',left:'-9999px',opacity:0,pointerEvents:'none'}}
+        value={form.website}
+        onChange={set('website')}
+      />
       {status === 'error' && (
-        <p className="form-error">Something went wrong. <a href={`mailto:${TEAM_EMAIL}`}>Email us directly</a> and we'll reply right away.</p>
+        <p className="form-error">{errorMessage || 'Something went wrong.'} <a href={`mailto:${TEAM_EMAIL}`}>Email us directly</a> and we'll reply right away.</p>
       )}
       <button
         type="submit"
@@ -112,10 +136,10 @@ function ContactForm() {
         {status === 'sending' ? (
           <><span className="spinner" />Sending…</>
         ) : (
-          'Send Workflow →'
+          'Start the Audit →'
         )}
       </button>
-      <p className="form-fine">We reply within one business day. No spam, ever.</p>
+      <p className="form-fine">We reply within one business day with the cleanest next step for the audit.</p>
     </form>
   )
 }
@@ -191,8 +215,8 @@ export default function BookDemo() {
         </div>
         <div className={`mobile-menu${menuOpen ? ' open' : ''}`}>
           <Link to="/" onClick={() => setMenuOpen(false)}>← Back to site</Link>
-          <a href={`#calendly`} onClick={() => setMenuOpen(false)}>Start With a Sample</a>
-          <a href={`#contact`} onClick={() => setMenuOpen(false)}>Send Workflow</a>
+          <a href={`#calendly`} onClick={() => setMenuOpen(false)}>Start the Audit</a>
+          <a href={`#contact`} onClick={() => setMenuOpen(false)}>Send Documents</a>
         </div>
       </nav>
 
@@ -204,24 +228,24 @@ export default function BookDemo() {
           <div className="book-header">
             <span className="section-eyebrow" style={{justifyContent:'center'}}>
               <span style={{width:6,height:6,borderRadius:'50%',background:'#22c55e',boxShadow:'0 0 10px #22c55e',display:'inline-block',animation:'pulse 1.8s infinite'}} />
-              Currently reviewing sample workflows
+              Currently running five-day document audits
             </span>
             <h1 className="book-h1">
-              Send the docs your team rekeys every day.{' '}
-              <span className="accent">We'll test the workflow.</span>
+              Start with the Consignd Document Audit.{' '}
+              <span className="accent">See what your workflow is actually doing.</span>
             </h1>
             <p className="book-sub">
-              Book a short fit call or tell us which document workflow wastes the most time. We will start with the sources, fields, handoffs, and review points before promising a rollout.
+              Send 25–50 real documents from the last two weeks of operations. We will map the document mix, extract the fields, identify review points, and show whether a managed rollout is worth it.
             </p>
           </div>
 
           {/* What to expect strip */}
           <div className="book-expect">
             {[
-              { ico:'⏱', text:'20-minute fit call' },
+              { ico:'⏱', text:'5-business-day audit' },
               { ico:'📄', text:'25–50 docs is enough to start' },
-              { ico:'🧭', text:'Map fields, sources, and handoffs' },
-              { ico:'📊', text:'Sample before rollout' },
+              { ico:'🧭', text:'Map fields, variation, and handoffs' },
+              { ico:'📊', text:'Written findings + structured sample' },
             ].map((item, i) => (
               <div className="expect-item" key={i}>
                 <span className="expect-ico">{item.ico}</span>
@@ -238,15 +262,15 @@ export default function BookDemo() {
               <div className="book-card-inner" id="calendly">
                 <div className="book-card-head">
                   <div>
-                    <div className="book-card-label">Start With a Sample</div>
-                    <h2 className="book-card-title">20-minute workflow fit call</h2>
-                    <p className="book-card-desc">We will walk through one painful intake workflow, identify the fields your team rekeys, and decide what a useful sample run should include.</p>
+                    <div className="book-card-label">Start the Document Audit</div>
+                    <h2 className="book-card-title">Book a 20-minute audit scoping call</h2>
+                    <p className="book-card-desc">We will define the first document set, confirm the fields that matter, and make sure the five-day audit is scoped around a real operational bottleneck.</p>
                   </div>
                   <div className="book-card-features">
                     {[
-                      'Review one real document workflow',
-                      'Identify fields, sources, and constraints',
-                      'Discuss sample scope and commercial fit',
+                      'Choose the first 1–2 document types to test',
+                      'Confirm fields, sources, and review constraints',
+                      'Align on audit scope, timeline, and handoff',
                     ].map((f, i) => (
                       <div className="book-feature" key={i}>
                         <span className="chk-sm"><CheckIcon /></span>{f}
@@ -275,15 +299,15 @@ export default function BookDemo() {
               <div className="book-card-inner" id="contact">
                 <div className="book-card-head">
                   <div>
-                    <div className="book-card-label book-card-label-orange">Send a Workflow</div>
+                    <div className="book-card-label book-card-label-orange">Send Documents Instead</div>
                     <h2 className="book-card-title">Not ready to book?</h2>
-                    <p className="book-card-desc">Tell us about the document flow your team hates most. We will reply with a practical starting point — even if the honest answer is that it is not ready to automate yet.</p>
+                    <p className="book-card-desc">Tell us which documents create the most manual work right now. We will reply with the cleanest way to scope the audit — even if the honest answer is that the workflow is not ready yet.</p>
                   </div>
                   <div className="book-card-features">
                     {[
                       'No commitment, no sales pressure',
                       'Reply within one business day',
-                      'Practical next step, not a generic demo',
+                      'Practical audit starting point, not a generic demo',
                     ].map((f, i) => (
                       <div className="book-feature" key={i}>
                         <span className="chk-sm chk-orange"><CheckIcon /></span>{f}
