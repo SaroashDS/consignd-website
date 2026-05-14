@@ -4,9 +4,11 @@ import { HashRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
 import BookDemo from './pages/BookDemo.jsx'
+import SmoothScroll from './components/SmoothScroll.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <SmoothScroll />
     <HashRouter>
       <Routes>
         <Route path="/" element={<App />} />

@@ -1,35 +1,12 @@
-import { useEffect, useState, Fragment } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import BorderGlow from './components/BorderGlow'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import GlowCard, { GLOW_BLUE, GLOW_ORANGE } from './components/GlowCard'
 import Logo from './components/Logo'
 import './App.css'
 
-/* ─── Brand constants ───────────────────────────────────────────── */
-const BRAND_COLORS = ['#3B82F6', '#60A5FA', '#F26522']
-const CARD_BG      = 'rgba(2,11,24,0.78)'
-const GLOW_BLUE    = '217 91 60'
-const GLOW_ORANGE  = '21 89 54'
-
-/* ─── GlowCard wrapper ──────────────────────────────────────────── */
-function GlowCard({ children, className = '', borderRadius = 22, glowColor = GLOW_BLUE, hover = 'm', ...rest }) {
-  return (
-    <BorderGlow
-      className={`glow-glass glow-hover-${hover} ${className}`}
-      backgroundColor={CARD_BG}
-      borderRadius={borderRadius}
-      glowColor={glowColor}
-      glowRadius={32}
-      glowIntensity={0.75}
-      coneSpread={28}
-      colors={BRAND_COLORS}
-      animated={false}
-      fillOpacity={0.35}
-      {...rest}
-    >
-      {children}
-    </BorderGlow>
-  )
-}
+gsap.registerPlugin(ScrollTrigger)
 
 /* ─── CheckIcon ─────────────────────────────────────────────────── */
 const CheckIcon = () => (
@@ -207,11 +184,19 @@ const headline = [
 /* ─── App ───────────────────────────────────────────────────────── */
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const cinematicRef = useRef(null)
 
   /* nav scroll */
   useEffect(() => {
     const nav = document.getElementById('nav')
-    const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40)
+    const onScroll = () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40)
+      const progress = document.getElementById('scroll-progress')
+      if (progress) {
+        const max = document.documentElement.scrollHeight - window.innerHeight
+        progress.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`
+      }
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     onScroll()
     return () => window.removeEventListener('scroll', onScroll)
@@ -260,6 +245,50 @@ export default function App() {
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  /* pinned cinematic workflow */
+  useLayoutEffect(() => {
+    const root = cinematicRef.current
+    if (!root) return undefined
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReduced) return undefined
+
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: root,
+          start: 'top top',
+          end: '+=1400',
+          scrub: 0.7,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      })
+
+      tl.fromTo('.cin-doc',
+        { y: 70, opacity: 0, rotate: -5, filter: 'blur(10px)' },
+        { y: 0, opacity: 1, rotate: 0, filter: 'blur(0px)', stagger: 0.08, duration: 0.7, ease: 'power3.out' }
+      )
+      .to({}, { duration: 0.25 })
+      .to('.cin-doc', { x: -48, y: -10, rotate: -2, stagger: 0.04, duration: 0.75, ease: 'power2.inOut' })
+      .fromTo('.cin-beam', { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.45, ease: 'power2.out' }, '<25%')
+      .fromTo('.cin-field', { x: 50, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.08, duration: 0.6, ease: 'power3.out' }, '<35%')
+      .to('.cin-doc', { opacity: 0.34, scale: 0.94, duration: 0.5 }, '<20%')
+      .to({}, { duration: 0.2 })
+      .fromTo('.cin-review', { y: 36, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, '<30%')
+      .fromTo('.cin-progress-fill', { scaleX: 0 }, { scaleX: 1, duration: 1.1, ease: 'none' }, '<')
+      .fromTo('.cin-final-chip', { y: 24, opacity: 0, scale: 0.94 }, { y: 0, opacity: 1, scale: 1, stagger: 0.08, duration: 0.65, ease: 'back.out(1.4)' }, '<45%')
+    }, root)
+
+    return () => ctx.revert()
+  }, [])
+
+  /* refresh scroll measurements after scene layout settles */
+  useEffect(() => {
+    const id = window.setTimeout(() => ScrollTrigger.refresh(), 120)
+    return () => window.clearTimeout(id)
   }, [])
 
   /* case metric counters */
@@ -312,6 +341,7 @@ export default function App() {
         <div className="bg-blob b6"></div>
         <div className="bg-noise"></div>
       </div>
+      <div className="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
 
       {/* ── Nav ── */}
       <nav className="nav" id="nav">
@@ -327,7 +357,7 @@ export default function App() {
             <a href="#" onClick={e=>{e.preventDefault();document.getElementById('pricing')?.scrollIntoView({behavior:'smooth'})}}>Pricing</a>
           </div>
           <div className="nav-right">
-            <Link to="/book-demo" className="btn btn-primary nav-cta">Book a Demo →</Link>
+            <Link to="/book-demo" className="btn btn-primary nav-cta">Test Your Documents →</Link>
             <button
               className={`hamburger${menuOpen ? ' open' : ''}`}
               onClick={() => setMenuOpen(v => !v)}
@@ -344,7 +374,7 @@ export default function App() {
           <a href="#" onClick={e=>{e.preventDefault();closeMenu();setTimeout(()=>document.getElementById('how')?.scrollIntoView({behavior:'smooth'}),120)}}>How it works</a>
           <a href="#" onClick={e=>{e.preventDefault();closeMenu();setTimeout(()=>document.getElementById('cases')?.scrollIntoView({behavior:'smooth'}),120)}}>Results</a>
           <a href="#" onClick={e=>{e.preventDefault();closeMenu();setTimeout(()=>document.getElementById('pricing')?.scrollIntoView({behavior:'smooth'}),120)}}>Pricing</a>
-          <Link to="/book-demo" className="btn btn-primary" style={{width:'100%',justifyContent:'center',marginTop:'8px'}} onClick={closeMenu}>Book a Demo →</Link>
+          <Link to="/book-demo" className="btn btn-primary" style={{width:'100%',justifyContent:'center',marginTop:'8px'}} onClick={closeMenu}>Test Your Documents →</Link>
         </div>
       </nav>
 
@@ -360,7 +390,7 @@ export default function App() {
         </div>
         <div className="wrap hero-content">
           <span className="hero-eyebrow">
-            <span className="dot"></span>Done-for-you data automation that makes you AI-ready
+            <span className="dot"></span>Everyone’s talking about AI. We’re focused on the data your team still has to clean by hand.
           </span>
 
           <h1>
@@ -372,18 +402,18 @@ export default function App() {
             ))}
           </h1>
 
-          <p className="sub">Before any AI tool, agent, or dashboard can help your ops team, the data has to exist. Consignd DataCore turns the emails, WhatsApp threads, PDFs, portals, and EDI feeds your carriers use into one clean, structured, AI-ready layer — synced into your TMS and ready for anything you want to build on top.</p>
+          <p className="sub">Send us the freight docs your team rekeys every day. Consignd turns messy rate cons, BOLs, PODs, invoices, emails, and portal exports into clean load records — with source links and human review where the data gets messy.</p>
           <div className="hero-ctas">
-            <Link to="/book-demo" className="btn btn-primary btn-lg">Book a Demo →</Link>
-            <a href="#" className="btn btn-ghost btn-lg" onClick={e=>{e.preventDefault();document.getElementById('how')?.scrollIntoView({behavior:'smooth'})}}>See how it works</a>
+            <Link to="/book-demo" className="btn btn-primary btn-lg">Test Your Documents →</Link>
+            <a href="#" className="btn btn-ghost btn-lg" onClick={e=>{e.preventDefault();document.getElementById('how')?.scrollIntoView({behavior:'smooth'})}}>See the workflow</a>
           </div>
 
           <div className="stat-pills stagger-group" id="heroStats">
             {[
-              { v:'94%',   l:'Fewer keystrokes per load' },
-              { v:'3.2×',  l:'Loads moved per dispatcher' },
-              { v:'<45s',  l:'From document → TMS' },
-              { v:'99.6%', l:'Field-level accuracy' },
+              { v:'25–50', l:'Docs to start a sample' },
+              { v:'1',     l:'Workflow before rollout' },
+              { v:'No rip', l:'Keep your current TMS' },
+              { v:'Review',l:'Humans check messy fields' },
             ].map((s, i) => (
               <GlowCard key={i} className="stagger-item" borderRadius={18} hover="s">
                 <div className="stat-pill-inner">
@@ -392,6 +422,94 @@ export default function App() {
                 </div>
               </GlowCard>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════ STORY ══════════════ */}
+      <section id="story" className="story-section">
+        <div className="wrap">
+          <div className="reveal story-intro">
+            <span className="section-eyebrow">The story behind every messy load</span>
+            <h2><span className="grad">The load does not start</span> <span className="num"> in your TMS.</span></h2>
+            <p className="section-sub">It starts as a rate con in an inbox, a BOL from a driver, a POD photo, a carrier portal update, or a forwarded message. By the time it reaches the TMS, your team has already done the invisible work.</p>
+          </div>
+
+          <div className="story-board stagger-group">
+            {[
+              ['01', 'A document lands somewhere messy.', 'Rate con in email. POD in WhatsApp. Invoice in a portal. The important data exists, but not where the system needs it.'],
+              ['02', 'A human turns it into “system data.”', 'Someone reads the PDF, checks the lane, fixes the reference number, and rekeys the same fields your customer already sent.'],
+              ['03', 'The cleanup becomes the workflow.', 'Dispatch, billing, customer updates, and invoice review all depend on whether that manual cleanup was right.'],
+              ['04', 'Consignd starts with the repeatable part.', 'Send 25–50 real documents. We show what extracts cleanly, what needs review, and whether the workflow deserves a rollout.'],
+            ].map(([n, title, body], i) => (
+              <GlowCard key={i} className="story-card stagger-item" borderRadius={22} hover="m" glowColor={i === 3 ? GLOW_ORANGE : GLOW_BLUE}>
+                <div className="story-card-inner">
+                  <div className="story-num">{n}</div>
+                  <h3>{title}</h3>
+                  <p>{body}</p>
+                </div>
+              </GlowCard>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════ CINEMATIC WORKFLOW ══════════════ */}
+      <section className="cinematic" ref={cinematicRef}>
+        <div className="cin-bg-orb"></div>
+        <div className="wrap cin-wrap">
+          <div className="cin-copy">
+            <span className="section-eyebrow">Watch the workflow clean itself up</span>
+            <h2><span className="grad">Messy freight docs in.</span> <span className="num">Clean records out.</span></h2>
+            <p className="section-sub">This is the Consignd motion: capture a real document batch, extract the fields that matter, flag the uncertain pieces, and hand your team a cleaner workflow — not a black box.</p>
+          </div>
+
+          <div className="cin-stage" aria-label="Cinematic workflow diagram">
+            <div className="cin-doc-stack">
+              {[
+                ['rate_con.pdf', 'Laredo → Chicago', '$2,850 · MC-884213'],
+                ['pod_photo.jpg', 'Delivered 04/25', 'Signed · 14:06'],
+                ['carrier_invoice.pdf', 'Accessorial added', '$175 detention'],
+              ].map(([name, route, meta], i) => (
+                <div className={`cin-doc cin-doc-${i + 1}`} key={name}>
+                  <div className="cin-doc-top"><span>{name}</span><b>{i + 1}</b></div>
+                  <div className="cin-doc-line wide"></div>
+                  <div className="cin-doc-line"></div>
+                  <div className="cin-doc-route">{route}</div>
+                  <div className="cin-doc-meta">{meta}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="cin-beam"></div>
+
+            <div className="cin-record">
+              <div className="cin-record-head">
+                <span>load.record</span>
+                <b>source-linked</b>
+              </div>
+              {[
+                ['pickup', 'Laredo, TX · 04/23 08:00'],
+                ['delivery', 'Chicago, IL · 04/25 14:00'],
+                ['rate_usd', '2,850.00'],
+                ['carrier_mc', 'MC-884213'],
+                ['exception', 'detention needs review'],
+              ].map(([field, value]) => (
+                <div className="cin-field" key={field}>
+                  <b>{field}</b><span>{value}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="cin-review">
+              <div className="cin-review-head">Human review where it matters</div>
+              <div className="cin-progress"><span className="cin-progress-fill"></span></div>
+              <div className="cin-final-chips">
+                <span className="cin-final-chip">Review queue</span>
+                <span className="cin-final-chip">Import-ready export</span>
+                <span className="cin-final-chip">Invoice match later</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -438,11 +556,11 @@ export default function App() {
       {/* ══════════════ VOICES ══════════════ */}
       <section id="voices" style={{padding:'80px 0 40px'}}>
         <div className="wrap reveal" style={{textAlign:'center',marginBottom:'12px'}}>
-          <span className="section-eyebrow" style={{justifyContent:'center'}}>What ops leaders are actually saying</span>
+          <span className="section-eyebrow" style={{justifyContent:'center'}}>What freight operators keep running into</span>
           <h2 style={{marginLeft:'auto',marginRight:'auto',maxWidth:'900px'}}>
-            <span className="grad">The real bottleneck isn't</span> <span className="num"> software.</span> <span className="grad"> It's the broken data underneath it.</span>
+            <span className="grad">The bottleneck is not always</span> <span className="num"> better software.</span> <span className="grad"> It is getting trustworthy data into the workflow.</span>
           </h2>
-          <p className="section-sub" style={{marginLeft:'auto',marginRight:'auto'}}>Pulled from r/logistics, r/freightbrokers, and a dozen ops Slacks. The same pattern every time — teams drowning in documents, systems that can't talk to each other, and AI tools that can't help until the foundation exists.</p>
+          <p className="section-sub" style={{marginLeft:'auto',marginRight:'auto'}}>The names change, but the complaint is the same: too many document formats, too many places to check, and too much tribal knowledge between the source document and the system of record.</p>
         </div>
         <div className="voices-wrap">
           <div className="voices-row">
@@ -458,7 +576,7 @@ export default function App() {
         <div className="wrap reveal" style={{textAlign:'center',marginBottom:'12px'}}>
           <span className="section-eyebrow" style={{justifyContent:'center'}}>Built for real freight workflows</span>
           <h2 style={{marginLeft:'auto',marginRight:'auto'}}>
-            <span className="grad">We ingest from</span> <span className="num"> every channel</span> <span className="grad"> your carriers actually use.</span>
+            <span className="grad">Start where the mess is</span> <span className="num"> costing the most time</span><span className="grad">.</span>
           </h2>
         </div>
         <div className="marquee-wrap reveal">
@@ -484,15 +602,15 @@ export default function App() {
         <div className="wrap">
           <div className="reveal">
             <span className="section-eyebrow">How it works</span>
-            <h2><span className="grad">Three stages.</span> <span className="num"> Zero</span> <span className="grad"> dispatcher keystrokes.</span></h2>
-            <p className="section-sub">A managed pipeline that runs 24/7 in the background. You keep your TMS, your workflows, and your relationships. We handle the typing.</p>
+            <h2><span className="grad">A narrow pilot.</span> <span className="num"> Then</span> <span className="grad"> a managed workflow.</span></h2>
+            <p className="section-sub">We do not start by promising a giant integration project. We start with one repeated document workflow, prove what can be extracted reliably, and only then design the managed rollout.</p>
           </div>
           <div className="pipe stagger-group">
             <GlowCard className="stagger-item" borderRadius={22} hover="l">
               <div className="pipe-card-inner">
                 <div className="step-num">STAGE 01</div>
                 <h3>Capture</h3>
-                <p>We monitor every inbox, portal, and channel where rate cons and BOLs arrive. Documents are pulled the moment they land.</p>
+                <p>You give us a small batch from the inbox, folder, export, or portal creating the most manual work. We use that to map the real workflow before touching the broader operation.</p>
                 <div className="pipe-illus">
                   <div className="ln"><b>inbox@ops.yours</b><span>2,411 new</span></div>
                   <div className="ln"><b className="pipe-ln-icon"><IcoWhatsApp />WhatsApp · Carriers</b><span>184</span></div>
@@ -512,7 +630,7 @@ export default function App() {
               <div className="pipe-card-inner">
                 <div className="step-num">STAGE 02</div>
                 <h3>Structure</h3>
-                <p>Load-trained extraction reads every document and returns clean, validated fields — pickup, delivery, commodity, rate, MC, references.</p>
+                <p>Freight-trained extraction turns messy documents into structured fields — pickup, delivery, commodity, rate, MC, references — with low-confidence fields sent for review.</p>
                 <div className="pipe-illus">
                   <div className="ln"><b>pickup_city</b><span>Laredo, TX</span></div>
                   <div className="ln"><b>rate_usd</b><span>2,850.00</span></div>
@@ -532,11 +650,11 @@ export default function App() {
               <div className="pipe-card-inner">
                 <div className="step-num">STAGE 03</div>
                 <h3>Sync</h3>
-                <p>Structured loads push directly into your TMS through our native integrations — with full audit trails and a link back to the source document.</p>
+                <p>Clean records are delivered in the least disruptive format first: review queue, CSV, import-ready file, or TMS workflow where access allows — always linked back to the source document.</p>
                 <div className="pipe-illus">
-                  <div className="ln"><b>→ Rose Rocket</b><span>✓ load #48219</span></div>
-                  <div className="ln"><b>→ Alvys</b><span>✓ load #A-7733</span></div>
-                  <div className="ln"><b>→ McLeod</b><span>✓ load #M-9041</span></div>
+                  <div className="ln"><b>→ Review queue</b><span>ready</span></div>
+                  <div className="ln"><b>→ CSV / import file</b><span>clean</span></div>
+                  <div className="ln"><b>→ TMS workflow</b><span>where supported</span></div>
                   <div className="ln"><b>audit_trail</b><span>attached</span></div>
                 </div>
               </div>
@@ -551,7 +669,7 @@ export default function App() {
           <div className="reveal" style={{maxWidth:'820px'}}>
             <span className="section-eyebrow">The AI-ready data layer</span>
             <h2><span className="grad">You can't put AI on top of a</span> <span className="num"> broken foundation.</span></h2>
-            <p className="section-sub">Every AI tool, agent, or dashboard your ops team tries is only as good as the data it reads. Consignd DataCore is the layer underneath — turning scattered, unstructured freight documents into clean, governed, queryable records. Once that exists, anything you want to automate on top becomes possible.</p>
+            <p className="section-sub">Every dashboard, invoice check, customer update, or AI workflow depends on the same boring foundation: clean load records with source links. Consignd DataCore builds that foundation first, so later automation has something trustworthy to work with.</p>
           </div>
 
           <div className="ai-grid stagger-group">
@@ -577,8 +695,8 @@ export default function App() {
                   <li><span className="k">✓</span>Unified load record, queryable by any agent or tool</li>
                   <li><span className="k">✓</span>Provenance on every field — source doc one click away</li>
                   <li><span className="k">✓</span>Confidence scores + human-in-the-loop on low-confidence</li>
-                  <li><span className="k">✓</span>Standard schema that maps cleanly across every TMS</li>
-                  <li><span className="k">✓</span>Event stream your downstream AI can actually subscribe to</li>
+                  <li><span className="k">✓</span>Standard schema that can be exported, reviewed, or mapped into your workflow</li>
+                  <li><span className="k">✓</span>Structured events for future automation: missing BOL, rate mismatch, late pickup</li>
                 </ul>
               </div>
             </GlowCard>
@@ -602,9 +720,9 @@ export default function App() {
 
           <div className="ai-use stagger-group">
             {[
-              { ico:'⟐', title:'Feed your AI agents',     body:'Hand your copilots and agents a structured load context instead of raw email threads. They stop hallucinating and start answering.' },
-              { ico:'≡', title:'Trustworthy analytics',    body:"Dashboards finally reflect reality because every metric traces back to a source document — not a junior's spreadsheet." },
-              { ico:'↯', title:'Automate exceptions',      body:'Subscribe to structured events — late pickup, rate mismatch, missing BOL — and route them automatically instead of hunting emails.' },
+              { ico:'⟐', title:'Cleaner invoice matching', body:'When load data is clean upstream, invoice review becomes less detective work and more exception handling.' },
+              { ico:'≡', title:'Trustworthy reporting',    body:"Dashboards become easier to trust because key fields trace back to the source document — not a spreadsheet someone rebuilt on Friday." },
+              { ico:'↯', title:'Cleaner exception queues', body:'Missing BOL, rate mismatch, late pickup, unknown accessorial — route the exception instead of hunting through emails.' },
             ].map((c, i) => (
               <GlowCard key={i} className="stagger-item" borderRadius={18} hover="s">
                 <div className="ai-use-card-inner">
@@ -621,7 +739,7 @@ export default function App() {
       {/* ══════════════ TMS LOGOS ══════════════ */}
       <section style={{padding:'20px 0 100px'}}>
         <div className="wrap reveal" style={{textAlign:'center'}}>
-          <p style={{color:'var(--muted)',fontSize:'13px',letterSpacing:'0.18em',textTransform:'uppercase',margin:'0 0 32px'}}>Native integrations with the TMS you already run</p>
+          <p style={{color:'var(--muted)',fontSize:'13px',letterSpacing:'0.18em',textTransform:'uppercase',margin:'0 0 32px'}}>Works around the TMS stack you already run</p>
           <div className="tms-strip stagger-group">
             {TMS_ENTRIES.map((t, i) => (
               <div className="tms-chip stagger-item" key={i}>
@@ -636,39 +754,39 @@ export default function App() {
       <section id="cases">
         <div className="wrap">
           <div className="reveal">
-            <span className="section-eyebrow">Case studies</span>
-            <h2><span className="grad">Teams that stopped typing —</span> <span className="num"> and started scaling.</span></h2>
+            <span className="section-eyebrow">What we measure in a pilot</span>
+            <h2><span className="grad">Before a rollout,</span> <span className="num"> prove the workflow is worth it.</span></h2>
           </div>
           <div className="cases stagger-group">
             <GlowCard className="stagger-item" borderRadius={22} hover="m" glowColor={GLOW_ORANGE}>
               <article className="case-inner">
                 <div className="case-head">
-                  <div className="case-co">Midwest Logistics Group</div>
-                  <span className="case-tag">Brokerage · 40 seats</span>
+                  <div className="case-co">Manual entry reduction</div>
+                  <span className="case-tag">Pilot metric</span>
                 </div>
-                <h3>"We grew load volume 2.4× without adding a single dispatcher seat."</h3>
+                <h3>Which repeated checks can be removed or turned into exceptions?</h3>
                 <div className="case-metrics">
-                  <div className="case-metric"><div className="v">2.4×</div><div className="l">Load volume</div></div>
-                  <div className="case-metric"><div className="v">−71%</div><div className="l">Entry errors</div></div>
-                  <div className="case-metric"><div className="v">$412K</div><div className="l">Annual labor saved</div></div>
+                  <div className="case-metric"><div className="v">50</div><div className="l">Sample docs</div></div>
+                  <div className="case-metric"><div className="v">7</div><div className="l">Fields tracked</div></div>
+                  <div className="case-metric"><div className="v">1</div><div className="l">Ops workflow</div></div>
                 </div>
-                <p className="case-quote">"Within six weeks Consignd DataCore was processing every rate confirmation we received automatically. Our dispatchers finally have time to build carrier relationships and actually close loads."<span className="who">— Daniela Ortiz · VP of Operations</span></p>
+                <p className="case-quote">We compare the current manual workflow against a cleaned sample: fields extracted, exceptions caught, review effort required, and where the process still needs a human.<span className="who">Pilot output · before/after workflow map</span></p>
               </article>
             </GlowCard>
 
             <GlowCard className="stagger-item" borderRadius={22} hover="m" glowColor={GLOW_ORANGE}>
               <article className="case-inner">
                 <div className="case-head">
-                  <div className="case-co">Coastal Freight Partners</div>
-                  <span className="case-tag">Asset-based · 120 trucks</span>
+                  <div className="case-co">Commercial fit</div>
+                  <span className="case-tag">Buying decision</span>
                 </div>
-                <h3>"Load build times dropped from 11 minutes to under 45 seconds."</h3>
+                <h3>Can the workflow support a monthly managed service without pretending it is magic software?</h3>
                 <div className="case-metrics">
-                  <div className="case-metric"><div className="v">45s</div><div className="l">Avg. load build</div></div>
-                  <div className="case-metric"><div className="v">99.6%</div><div className="l">Field accuracy</div></div>
-                  <div className="case-metric"><div className="v">18</div><div className="l">FTEs redeployed</div></div>
+                  <div className="case-metric"><div className="v">Setup</div><div className="l">One-time</div></div>
+                  <div className="case-metric"><div className="v">Retainer</div><div className="l">Monthly</div></div>
+                  <div className="case-metric"><div className="v">Volume</div><div className="l">Scales</div></div>
                 </div>
-                <p className="case-quote">"The ROI was clear inside the first month. We redeployed 18 people from data entry into carrier sales — and that's what actually grew the business."<span className="who">— Marcus Whelan · Chief Operating Officer</span></p>
+                <p className="case-quote">If the pilot shows enough repeatable work, we scope a rollout: one-time setup for sources and rules, monthly managed processing, and optional expansion into reconciliation/reporting.<span className="who">Commercial model · pilot → rollout</span></p>
               </article>
             </GlowCard>
           </div>
@@ -680,23 +798,23 @@ export default function App() {
         <div className="wrap">
           <div className="reveal">
             <span className="section-eyebrow">Built for freight operators</span>
-            <h2><span className="grad">Trust, accuracy, and auditability —</span> <span className="num"> by default.</span></h2>
+            <h2><span className="grad">Practical, auditable,</span> <span className="num"> and human-reviewed.</span></h2>
           </div>
           <div className="trust stagger-group">
             {[
               {
-                title:'SOC 2 Type II · HIPAA-ready',
-                body:'Your documents never leave encrypted infrastructure. Row-level audit logs capture every extraction and TMS write, with PII redaction on by default.',
+                title:'Every field has a source',
+                body:'Every extracted field links back to the document, email, or export it came from, so your team can verify the answer instead of trusting a black box.',
                 icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v7c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V5l8-3z" stroke="currentColor" strokeWidth="1.6"/><path d="M8.5 12l2.5 2.5L16 9.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
               },
               {
                 title:'Human-in-the-loop review',
-                body:'Anything below our confidence threshold routes to a Consignd analyst — not your dispatchers. You only ever see clean, verified loads in your TMS.',
+                body:'Anything below the confidence threshold gets flagged for review. The goal is not blind automation — it is fewer repetitive checks and a cleaner exception queue.',
                 icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 7l8-4 8 4-8 4-8-4z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/><path d="M4 12l8 4 8-4M4 17l8 4 8-4" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/></svg>
               },
               {
-                title:'Ten-day rollout, done-for-you',
-                body:'We map your TMS, your load types, and your edge cases. Go live in under two weeks with a dedicated ops lead on a shared Slack channel.',
+                title:'No big-platform commitment',
+                body:'Start with a sample. If the workflow is not repeatable enough, we say that. If it is, the rollout is scoped around document volume, complexity, and review needs.',
                 icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6"/><path d="M12 7v5l3 2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/></svg>
               },
             ].map((col, i) => (
@@ -717,27 +835,27 @@ export default function App() {
         <div className="wrap">
           <div className="reveal" style={{textAlign:'center'}}>
             <span className="section-eyebrow" style={{justifyContent:'center'}}>Pricing</span>
-            <h2 style={{marginLeft:'auto',marginRight:'auto',textAlign:'center'}}><span className="grad">One tier.</span> <span className="num"> Priced per load</span><span className="grad">, not per seat.</span></h2>
-            <p className="section-sub" style={{marginLeft:'auto',marginRight:'auto',textAlign:'center'}}>We only win when your dispatchers stop typing. Pricing scales with automated load volume, and we cap it as your team grows.</p>
+            <h2 style={{marginLeft:'auto',marginRight:'auto',textAlign:'center'}}><span className="grad">Simple commercial model.</span> <span className="num"> Sample, setup, managed monthly.</span></h2>
+            <p className="section-sub" style={{marginLeft:'auto',marginRight:'auto',textAlign:'center'}}>You should not buy a platform before you know the workflow is worth automating. Start with a sample run, then move to setup and monthly managed processing only if the numbers make sense.</p>
           </div>
           <div className="pricing-wrap reveal-scale">
             <GlowCard borderRadius={28} hover="s" glowColor={GLOW_ORANGE} style={{maxWidth:'560px',width:'100%'}}>
               <div className="pricing-inner">
-                <div className="tier">Done-for-you Automation</div>
-                <h3>Everything, managed end-to-end.</h3>
-                <p className="lede">A dedicated ops team, unlimited sources, native TMS sync, and an SLA on field-level accuracy. No per-seat surprises.</p>
+                <div className="tier">Commercial model</div>
+                <h3>Sample first. Setup second. Monthly only if it works.</h3>
+                <p className="lede">The commercial model is intentionally boring: test real documents, configure the workflow, then run it as a managed service priced around volume and complexity.</p>
                 <ul>
                   {[
-                    'Unlimited ingestion channels & document types',
-                    'Native TMS sync across all supported platforms',
-                    '99.6% field-level accuracy SLA, or we credit it back',
-                    'Dedicated operations lead + shared Slack channel',
-                    'Audit trail & source-document link on every load',
+                    'Sample run with 25–50 real documents',
+                    'One-time setup for document types, fields, and review rules',
+                    'Monthly managed processing priced by volume and complexity',
+                    'Human review for low-confidence or exception-heavy records',
+                    'Optional expansion into invoice matching, dispute queues, and reporting',
                   ].map((item, i) => (
                     <li key={i}><span className="chk"><CheckIcon /></span>{item}</li>
                   ))}
                 </ul>
-                <Link to="/book-demo" className="btn btn-primary btn-lg" style={{width:'100%',justifyContent:'center'}}>Talk to Our Team →</Link>
+                <Link to="/book-demo" className="btn btn-primary btn-lg" style={{width:'100%',justifyContent:'center'}}>Test Your Documents →</Link>
               </div>
             </GlowCard>
           </div>
@@ -748,9 +866,9 @@ export default function App() {
       <section className="final" id="cta">
         <div className="final-orb"></div>
         <div className="wrap reveal-scale">
-          <h2><span className="grad">Stop paying dispatchers to type.</span> <span className="num"> Start paying them to close.</span></h2>
-          <p>Twenty-minute walkthrough. We'll run a sample rate con from your own inbox, end-to-end, in front of you. If it doesn't land cleanly in your TMS, you'll know in the call.</p>
-          <Link to="/book-demo" className="btn btn-primary btn-lg">Book a Demo →</Link>
+          <h2><span className="grad">Send the docs your team rekeys every day.</span> <span className="num"> We'll show what can be cleaned up.</span></h2>
+          <p>Start with 25–50 real documents. We will show what extracts cleanly, what needs review, and whether the workflow is strong enough for a managed rollout.</p>
+          <Link to="/book-demo" className="btn btn-primary btn-lg">Test Your Documents →</Link>
         </div>
       </section>
 
