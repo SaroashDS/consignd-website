@@ -199,7 +199,9 @@ const Grainient = ({
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
-      try { container.removeChild(canvas); } catch { }
+      if (container.contains(canvas)) {
+        container.removeChild(canvas);
+      }
     };
   }, [
     timeSpeed, colorBalance, warpStrength, warpFrequency, warpSpeed,

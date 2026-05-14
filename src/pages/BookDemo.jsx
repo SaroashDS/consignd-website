@@ -1,41 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { InlineWidget } from 'react-calendly'
-import BorderGlow from '../components/BorderGlow'
+import GlowCard, { GLOW_BLUE, GLOW_ORANGE } from '../components/GlowCard'
 import Grainient from '../components/Grainient'
 import Logo from '../components/Logo'
 import './BookDemo.css'
 
 /* ─── Update this to your Calendly link ────────────────────────── */
-const CALENDLY_URL = 'https://calendly.com/consignd/demo'
+const CALENDLY_URL = 'https://calendly.com/operations-consignd/30min'
 
 /* ─── Update this to your team email (used as mailto fallback) ─── */
 const TEAM_EMAIL = 'team@consignd.com'
-
-const BRAND_COLORS = ['#3B82F6', '#60A5FA', '#F26522']
-const CARD_BG      = 'rgba(2,11,24,0.82)'
-const GLOW_BLUE    = '217 91 60'
-const GLOW_ORANGE  = '21 89 54'
-
-function GlowCard({ children, className = '', borderRadius = 24, glowColor = GLOW_BLUE, hover = 's', ...rest }) {
-  return (
-    <BorderGlow
-      className={`glow-glass glow-hover-${hover} ${className}`}
-      backgroundColor={CARD_BG}
-      borderRadius={borderRadius}
-      glowColor={glowColor}
-      glowRadius={36}
-      glowIntensity={0.8}
-      coneSpread={28}
-      colors={BRAND_COLORS}
-      animated={false}
-      fillOpacity={0.35}
-      {...rest}
-    >
-      {children}
-    </BorderGlow>
-  )
-}
 
 /* ─── Check icon ────────────────────────────────────────────────── */
 const CheckIcon = () => (
@@ -120,7 +95,7 @@ function ContactForm() {
         <label className="form-label">What's the biggest pain right now?</label>
         <textarea
           className="form-textarea"
-          placeholder="E.g. dispatchers re-entering rate cons, carrier portals all over the place, AI tools not working because data is a mess..."
+          placeholder="E.g. rate cons being rekeyed, BOLs stuck in inboxes, carrier invoices not matching rate cons, portal exports getting cleaned by hand..."
           rows={5}
           value={form.message}
           onChange={set('message')}
@@ -137,7 +112,7 @@ function ContactForm() {
         {status === 'sending' ? (
           <><span className="spinner" />Sending…</>
         ) : (
-          'Send Message →'
+          'Send Workflow →'
         )}
       </button>
       <p className="form-fine">We reply within one business day. No spam, ever.</p>
@@ -216,8 +191,8 @@ export default function BookDemo() {
         </div>
         <div className={`mobile-menu${menuOpen ? ' open' : ''}`}>
           <Link to="/" onClick={() => setMenuOpen(false)}>← Back to site</Link>
-          <a href={`#calendly`} onClick={() => setMenuOpen(false)}>Book a Demo</a>
-          <a href={`#contact`} onClick={() => setMenuOpen(false)}>Talk to Our Team</a>
+          <a href={`#calendly`} onClick={() => setMenuOpen(false)}>Start With a Sample</a>
+          <a href={`#contact`} onClick={() => setMenuOpen(false)}>Send Workflow</a>
         </div>
       </nav>
 
@@ -229,24 +204,24 @@ export default function BookDemo() {
           <div className="book-header">
             <span className="section-eyebrow" style={{justifyContent:'center'}}>
               <span style={{width:6,height:6,borderRadius:'50%',background:'#22c55e',boxShadow:'0 0 10px #22c55e',display:'inline-block',animation:'pulse 1.8s infinite'}} />
-              Currently accepting new customers
+              Currently reviewing sample workflows
             </span>
             <h1 className="book-h1">
-              Stop paying dispatchers<br/>to type.{' '}
-              <span className="accent">Let's talk.</span>
+              Send the docs your team rekeys every day.{' '}
+              <span className="accent">We'll test the workflow.</span>
             </h1>
             <p className="book-sub">
-              Pick a time below for a 20-minute walkthrough — we'll run a live extraction from a real rate con in front of you. Or drop us a message and we'll reach out within one business day.
+              Book a short fit call or tell us which document workflow wastes the most time. We will start with the sources, fields, handoffs, and review points before promising a rollout.
             </p>
           </div>
 
           {/* What to expect strip */}
           <div className="book-expect">
             {[
-              { ico:'⏱', text:'20-minute call, no fluff' },
-              { ico:'📄', text:'Live demo with your own docs' },
-              { ico:'🔌', text:'We map your TMS on the call' },
-              { ico:'🚀', text:'Go-live in under 10 days' },
+              { ico:'⏱', text:'20-minute fit call' },
+              { ico:'📄', text:'25–50 docs is enough to start' },
+              { ico:'🧭', text:'Map fields, sources, and handoffs' },
+              { ico:'📊', text:'Sample before rollout' },
             ].map((item, i) => (
               <div className="expect-item" key={i}>
                 <span className="expect-ico">{item.ico}</span>
@@ -259,19 +234,19 @@ export default function BookDemo() {
           <div className="book-grid">
 
             {/* Calendly card */}
-            <GlowCard className="book-calendly-card" borderRadius={24} glowColor={GLOW_BLUE} hover="s">
+            <GlowCard className="book-calendly-card" borderRadius={24} glowColor={GLOW_BLUE} hover="s" backgroundColor="rgba(2,11,24,0.82)" glowRadius={36} glowIntensity={0.8}>
               <div className="book-card-inner" id="calendly">
                 <div className="book-card-head">
                   <div>
-                    <div className="book-card-label">Book a Demo</div>
-                    <h2 className="book-card-title">20-minute walkthrough</h2>
-                    <p className="book-card-desc">We'll run a sample rate con from your inbox, end-to-end, live on the call. If it doesn't land cleanly in your TMS, you'll know immediately.</p>
+                    <div className="book-card-label">Start With a Sample</div>
+                    <h2 className="book-card-title">20-minute workflow fit call</h2>
+                    <p className="book-card-desc">We will walk through one painful intake workflow, identify the fields your team rekeys, and decide what a useful sample run should include.</p>
                   </div>
                   <div className="book-card-features">
                     {[
-                      'Live extraction from your own documents',
-                      'TMS integration mapped on the call',
-                      'Pricing tailored to your load volume',
+                      'Review one real document workflow',
+                      'Identify fields, sources, and constraints',
+                      'Discuss sample scope and commercial fit',
                     ].map((f, i) => (
                       <div className="book-feature" key={i}>
                         <span className="chk-sm"><CheckIcon /></span>{f}
@@ -296,19 +271,19 @@ export default function BookDemo() {
             </GlowCard>
 
             {/* Contact form card */}
-            <GlowCard className="book-contact-card" borderRadius={24} glowColor={GLOW_ORANGE} hover="s">
+            <GlowCard className="book-contact-card" borderRadius={24} glowColor={GLOW_ORANGE} hover="s" backgroundColor="rgba(2,11,24,0.82)" glowRadius={36} glowIntensity={0.8}>
               <div className="book-card-inner" id="contact">
                 <div className="book-card-head">
                   <div>
-                    <div className="book-card-label book-card-label-orange">Talk to Our Team</div>
+                    <div className="book-card-label book-card-label-orange">Send a Workflow</div>
                     <h2 className="book-card-title">Not ready to book?</h2>
-                    <p className="book-card-desc">Tell us about your stack and current pain points. We'll send you a tailored breakdown and follow up within one business day.</p>
+                    <p className="book-card-desc">Tell us about the document flow your team hates most. We will reply with a practical starting point — even if the honest answer is that it is not ready to automate yet.</p>
                   </div>
                   <div className="book-card-features">
                     {[
                       'No commitment, no sales pressure',
                       'Reply within one business day',
-                      'Direct line to the ops team',
+                      'Practical next step, not a generic demo',
                     ].map((f, i) => (
                       <div className="book-feature" key={i}>
                         <span className="chk-sm chk-orange"><CheckIcon /></span>{f}
