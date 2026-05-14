@@ -39,18 +39,33 @@ function ContactForm() {
 
   const handleSubmit = async e => {
     e.preventDefault()
+    const formEl = e.currentTarget
+    if (!formEl.reportValidity()) return
+
+    const formData = new FormData(formEl)
+    const payload = {
+      name: String(formData.get('name') || '').trim(),
+      company: String(formData.get('company') || '').trim(),
+      email: String(formData.get('email') || '').trim(),
+      loads: String(formData.get('loads') || '').trim(),
+      message: String(formData.get('message') || '').trim(),
+      website: String(formData.get('website') || '').trim(),
+      submittedAt,
+    }
+
+    setForm(payload)
     setStatus('sending')
     setErrorMessage('')
     try {
       const res = await fetch(CONTACT_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, submittedAt }),
+        body: JSON.stringify(payload),
       })
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
-        throw new Error(data?.error || 'Request failed')
+        throw new Error(data?.details?.join(', ') || data?.error || 'Request failed')
       }
 
       setStatus('sent')
@@ -83,20 +98,20 @@ function ContactForm() {
       <div className="form-row">
         <div className="form-group">
           <label className="form-label">Your name</label>
-          <input className="form-input" type="text" placeholder="Alex Rivera" value={form.name} onChange={set('name')} required />
+          <input className="form-input" type="text" name="name" autoComplete="name" placeholder="Alex Rivera" value={form.name} onChange={set('name')} required />
         </div>
         <div className="form-group">
           <label className="form-label">Company</label>
-          <input className="form-input" type="text" placeholder="Midwest Freight LLC" value={form.company} onChange={set('company')} required />
+          <input className="form-input" type="text" name="company" autoComplete="organization" placeholder="Midwest Freight LLC" value={form.company} onChange={set('company')} required />
         </div>
       </div>
       <div className="form-group">
         <label className="form-label">Work email</label>
-        <input className="form-input" type="email" placeholder="alex@company.com" value={form.email} onChange={set('email')} required />
+        <input className="form-input" type="email" name="email" autoComplete="email" placeholder="alex@company.com" value={form.email} onChange={set('email')} required />
       </div>
       <div className="form-group">
         <label className="form-label">Loads per month (approx.)</label>
-        <select className="form-select" value={form.loads} onChange={set('loads')} required>
+        <select className="form-select" name="loads" value={form.loads} onChange={set('loads')} required>
           <option value="">Select range</option>
           <option value="<500">Under 500</option>
           <option value="500-2000">500 – 2,000</option>
@@ -109,6 +124,7 @@ function ContactForm() {
         <label className="form-label">What's the biggest pain right now?</label>
         <textarea
           className="form-textarea"
+          name="message"
           placeholder="E.g. rate cons being rekeyed, BOLs stuck in inboxes, carrier invoices not matching rate cons, portal exports getting cleaned by hand..."
           rows={5}
           value={form.message}
@@ -117,6 +133,7 @@ function ContactForm() {
       </div>
       <input
         type="text"
+        name="website"
         tabIndex="-1"
         autoComplete="off"
         aria-hidden="true"
