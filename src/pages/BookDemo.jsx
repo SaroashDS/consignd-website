@@ -205,6 +205,7 @@ export default function BookDemo() {
           grainAmount={0.045}
           grainScale={1.8}
           grainAnimated={false}
+          animated={false}
           contrast={1.2}
           gamma={1.05}
           saturation={0.6}

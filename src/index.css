@@ -897,6 +897,17 @@ footer { border-top: 1px solid var(--glass-bd); padding: 42px 0 58px; color: var
   .case-inner .case-metrics { grid-template-columns: 1fr 1fr; gap: 10px; }
 }
 
+/* Performance trim: disable the heaviest always-on motion */
+.bg-grid,
+.bg-blob,
+.aurora,
+.doc,
+.voices-track,
+.marquee-track {
+  animation: none !important;
+  will-change: auto;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
 }
