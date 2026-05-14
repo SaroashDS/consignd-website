@@ -12,6 +12,7 @@ const CALENDLY_URL = 'https://calendly.com/operations-consignd/30min'
 /* ─── Update this to your team email (used as mailto fallback) ─── */
 const TEAM_EMAIL = 'website.inquiries@consignd.one'
 const CONTACT_ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT || 'https://project-qay72.vercel.app/api/contact'
+const EMAIL_RE = /^\S+@\S+\.\S+$/
 
 /* ─── Check icon ────────────────────────────────────────────────── */
 const CheckIcon = () => (
@@ -51,6 +52,13 @@ function ContactForm() {
       message: String(formData.get('message') || '').trim(),
       website: String(formData.get('website') || '').trim(),
       submittedAt,
+    }
+
+    if (!EMAIL_RE.test(payload.email)) {
+      const emailInput = formEl.elements.namedItem('email')
+      emailInput?.focus?.()
+      setErrorMessage('Please enter a valid work email before sending.')
+      return
     }
 
     setForm(payload)
@@ -94,7 +102,7 @@ function ContactForm() {
   }
 
   return (
-    <form className="contact-form" onSubmit={handleSubmit} noValidate>
+    <form className="contact-form" onSubmit={handleSubmit}>
       <div className="form-row">
         <div className="form-group">
           <label className="form-label">Your name</label>
@@ -107,7 +115,7 @@ function ContactForm() {
       </div>
       <div className="form-group">
         <label className="form-label">Work email</label>
-        <input className="form-input" type="email" name="email" autoComplete="email" placeholder="alex@company.com" value={form.email} onChange={set('email')} required />
+        <input className="form-input" type="email" name="email" autoComplete="email" placeholder="alex@company.com" value={form.email} onChange={e => { set('email')(e); if (errorMessage) setErrorMessage('') }} required />
       </div>
       <div className="form-group">
         <label className="form-label">Loads per month (approx.)</label>
