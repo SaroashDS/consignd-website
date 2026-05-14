@@ -830,32 +830,76 @@ export default function App() {
         </div>
       </section>
 
+      {/* ══════════════ DOCUMENT AUDIT ══════════════ */}
+      <section id="audit-offer">
+        <div className="wrap">
+          <div className="reveal" style={{textAlign:'center'}}>
+            <span className="section-eyebrow" style={{justifyContent:'center'}}>Start with the audit</span>
+            <h2 style={{marginLeft:'auto',marginRight:'auto',textAlign:'center'}}><span className="grad">The Consignd Document Audit.</span> <span className="num"> A five-day diagnostic for freight broker back-office ops.</span></h2>
+            <p className="section-sub" style={{marginLeft:'auto',marginRight:'auto',textAlign:'center'}}>Send 25–50 real documents from the last two weeks of operations. We classify them, extract the fields, map the variation, and show you where your team is still burning time by hand.</p>
+          </div>
+          <div className="cases stagger-group" style={{marginTop:'28px'}}>
+            <GlowCard className="stagger-item" borderRadius={22} hover="m" glowColor={GLOW_ORANGE}>
+              <article className="case-inner">
+                <div className="case-head">
+                  <div className="case-co">What we do in 5 days</div>
+                  <span className="case-tag">Audit scope</span>
+                </div>
+                <h3>We test the workflow using your actual documents — not a sandbox demo.</h3>
+                <div className="case-metrics">
+                  <div className="case-metric"><div className="v">25–50</div><div className="l">Real docs</div></div>
+                  <div className="case-metric"><div className="v">1–2</div><div className="l">Doc types to start</div></div>
+                  <div className="case-metric"><div className="v">5</div><div className="l">Business days</div></div>
+                </div>
+                <p className="case-quote">We classify every document by type and carrier, extract the key fields, show what parses cleanly versus what needs review, and produce a TMS-ready structured data sample from your own workflow.<span className="who">Audit output · written report + structured sample</span></p>
+              </article>
+            </GlowCard>
+
+            <GlowCard className="stagger-item" borderRadius={22} hover="m" glowColor={GLOW_ORANGE}>
+              <article className="case-inner">
+                <div className="case-head">
+                  <div className="case-co">What you get back</div>
+                  <span className="case-tag">Decision material</span>
+                </div>
+                <h3>An honest picture of what your documents contain, where the bottlenecks are, and whether rollout makes sense.</h3>
+                <div className="case-metrics">
+                  <div className="case-metric"><div className="v">Mix</div><div className="l">By carrier/type</div></div>
+                  <div className="case-metric"><div className="v">Fields</div><div className="l">Clean vs review</div></div>
+                  <div className="case-metric"><div className="v">Scope</div><div className="l">If rollout fits</div></div>
+                </div>
+                <p className="case-quote">If the audit shows repeatable work, we scope setup and managed monthly processing. If it does not, we tell you that directly instead of forcing a software story where there isn’t one.<span className="who">Commercial model · audit → rollout</span></p>
+              </article>
+            </GlowCard>
+          </div>
+        </div>
+      </section>
+
       {/* ══════════════ PRICING ══════════════ */}
       <section id="pricing">
         <div className="wrap">
           <div className="reveal" style={{textAlign:'center'}}>
-            <span className="section-eyebrow" style={{justifyContent:'center'}}>Pricing</span>
-            <h2 style={{marginLeft:'auto',marginRight:'auto',textAlign:'center'}}><span className="grad">Simple commercial model.</span> <span className="num"> Sample, setup, managed monthly.</span></h2>
-            <p className="section-sub" style={{marginLeft:'auto',marginRight:'auto',textAlign:'center'}}>You should not buy a platform before you know the workflow is worth automating. Start with a sample run, then move to setup and monthly managed processing only if the numbers make sense.</p>
+            <span className="section-eyebrow" style={{justifyContent:'center'}}>Commercial model</span>
+            <h2 style={{marginLeft:'auto',marginRight:'auto',textAlign:'center'}}><span className="grad">Audit first.</span> <span className="num"> Setup second. Managed monthly only if it works.</span></h2>
+            <p className="section-sub" style={{marginLeft:'auto',marginRight:'auto',textAlign:'center'}}>You should not buy a platform before you know the workflow is worth automating. Start with the Document Audit, then move to setup and monthly managed processing only if the numbers make sense.</p>
           </div>
           <div className="pricing-wrap reveal-scale">
             <GlowCard borderRadius={28} hover="s" glowColor={GLOW_ORANGE} style={{maxWidth:'560px',width:'100%'}}>
               <div className="pricing-inner">
                 <div className="tier">Commercial model</div>
-                <h3>Sample first. Setup second. Monthly only if it works.</h3>
-                <p className="lede">The commercial model is intentionally boring: test real documents, configure the workflow, then run it as a managed service priced around volume and complexity.</p>
+                <h3>Audit first. Roll out only when the workflow proves out.</h3>
+                <p className="lede">The commercial model is intentionally boring: run a five-day audit on real documents, configure the workflow only if it is repeatable, then operate it as a managed service priced around volume and complexity.</p>
                 <ul>
                   {[
-                    'Sample run with 25–50 real documents',
-                    'One-time setup for document types, fields, and review rules',
+                    'Five-day Document Audit using 25–50 real documents',
+                    'Written findings: document mix, extraction quality, and review burden',
+                    'One-time setup for document types, fields, and review rules if rollout fits',
                     'Monthly managed processing priced by volume and complexity',
-                    'Human review for low-confidence or exception-heavy records',
                     'Optional expansion into invoice matching, dispute queues, and reporting',
                   ].map((item, i) => (
                     <li key={i}><span className="chk"><CheckIcon /></span>{item}</li>
                   ))}
                 </ul>
-                <Link to="/book-demo" className="btn btn-primary btn-lg" style={{width:'100%',justifyContent:'center'}}>Test Your Documents →</Link>
+                <Link to="/book-demo" className="btn btn-primary btn-lg" style={{width:'100%',justifyContent:'center'}}>Start the Document Audit →</Link>
               </div>
             </GlowCard>
           </div>
@@ -866,9 +910,9 @@ export default function App() {
       <section className="final" id="cta">
         <div className="final-orb"></div>
         <div className="wrap reveal-scale">
-          <h2><span className="grad">Send the docs your team rekeys every day.</span> <span className="num"> We'll show what can be cleaned up.</span></h2>
-          <p>Start with 25–50 real documents. We will show what extracts cleanly, what needs review, and whether the workflow is strong enough for a managed rollout.</p>
-          <Link to="/book-demo" className="btn btn-primary btn-lg">Test Your Documents →</Link>
+          <h2><span className="grad">Start with a five-day Document Audit.</span> <span className="num"> Then decide if rollout is worth it.</span></h2>
+          <p>Send 25–50 real documents. We will show what extracts cleanly, what needs review, where the workflow breaks, and whether a managed rollout makes commercial sense.</p>
+          <Link to="/book-demo" className="btn btn-primary btn-lg">Start the Document Audit →</Link>
         </div>
       </section>
 
