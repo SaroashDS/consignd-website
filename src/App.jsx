@@ -4,7 +4,6 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import GlowCard, { GLOW_BLUE, GLOW_ORANGE } from './components/GlowCard'
 import Logo from './components/Logo'
-import './App.css'
 
 gsap.registerPlugin(ScrollTrigger)
 
