@@ -174,6 +174,10 @@ export default function BookDemo() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
+    document.title = 'Run the Document Audit — Consignd'
+  }, [])
+
+  useEffect(() => {
     const nav = document.getElementById('book-nav')
     const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 40)
     window.addEventListener('scroll', onScroll, { passive: true })

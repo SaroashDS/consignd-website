@@ -185,6 +185,10 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const cinematicRef = useRef(null)
 
+  useEffect(() => {
+    document.title = 'Consignd — The Document Audit for Freight Brokers | Rate Cons, BOLs & PODs to Clean TMS Data'
+  }, [])
+
   /* nav scroll */
   useEffect(() => {
     const nav = document.getElementById('nav')

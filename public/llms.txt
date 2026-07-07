@@ -1,0 +1,43 @@
+# Consignd DataCore
+
+> Consignd DataCore is a document-intake service for freight brokers. It turns
+> rate confirmations, bills of lading (BOLs), proof-of-delivery documents
+> (PODs), and carrier invoices — arriving as PDFs, scans, phone photos, email
+> bodies, WhatsApp forwards, portal exports, FTP drops, or EDI feeds — into
+> clean, source-linked load records, with a human review step on any
+> low-confidence field. It works around the broker's existing TMS rather than
+> replacing it.
+
+## Who it's for
+
+US freight brokerages and 3PLs, roughly 500–15,000 loads per month, whose
+dispatchers and billing teams still rekey document data into a TMS by hand.
+
+## How engagement works (audit-first)
+
+1. The broker sends 25–50 real documents from the last two weeks of operations.
+2. Consignd runs a five-day paid Document Audit: classifies every document,
+   extracts key fields, maps variation by carrier and type, and reports what
+   parses cleanly versus what needs human review.
+3. If the workflow proves repeatable, rollout is a one-time setup plus monthly
+   managed processing priced by document volume and complexity. If it doesn't,
+   the report says so directly.
+
+## Key facts
+
+- Matching is order-independent: a BOL can arrive before its rate con;
+  whichever document arrives first seeds the load and later documents match in.
+- Unmatched documents go to a triage queue — never dropped or force-matched.
+- Every extracted field links back to its source document (provenance).
+- Low-confidence fields are routed to a human review queue, never silently guessed.
+- Output formats: review queue, CSV, import-ready file, or TMS workflow where
+  access allows.
+
+## Pages
+
+- Home: https://consignd.one/
+- Run the Document Audit: https://consignd.one/book-demo
+
+## Contact
+
+website.inquiries@consignd.one
