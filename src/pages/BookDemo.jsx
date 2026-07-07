@@ -161,7 +161,7 @@ function ContactForm() {
         {status === 'sending' ? (
           <><span className="spinner" />Sending…</>
         ) : (
-          'Start the Audit →'
+          'Run the Document Audit →'
         )}
       </button>
       <p className="form-fine">We reply within one business day with the cleanest next step for the audit.</p>
@@ -356,8 +356,7 @@ export default function BookDemo() {
         <div className="wrap foot">
           <Link to="/" className="logo" aria-label="Consignd DataCore"><Logo /></Link>
           <div className="foot-links">
-            <a href="#">Privacy</a>
-            <a href="#">Security</a>
+            <Link to="/privacy">Privacy &amp; Security</Link>
             <a href={`mailto:${TEAM_EMAIL}`}>Contact</a>
           </div>
           <div>© 2026 Consignd, Inc. · DataCore™</div>

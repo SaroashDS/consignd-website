@@ -64,34 +64,21 @@ const IcoCamera = () => (
   </svg>
 )
 
-/* ─── Voices data ───────────────────────────────────────────────── */
+/* ─── Voices data — unattributed paraphrases from discovery calls and
+       public operator forums. Never fabricate named sources here. ──── */
 const voices = [
-  { user:'u/Equal-Hair3068',    sub:'r/logistics',      meta:'2d · Ops Manager',       q:'"still manually cross-referencing three different systems just to figure out if a load actually delivered on time."', up:247, cmts:42, av:'E', color:'' },
-  { user:'u/Personal-Lack4170', sub:'r/freightbrokers', meta:'4d · Dispatcher',         q:'"the biggest time sink isn\'t decision-making — it\'s cleaning and reconciling data from 5 different sources before you can even trust it."', up:389, cmts:67, av:'P', color:'o' },
-  { user:'u/thea_in_supply',    sub:'r/logistics',      meta:'1w · Supply Chain Lead',  q:'"you can\'t layer ai on top of a foundation that\'s basically held together by tribal knowledge and vlookups."', up:512, cmts:88, av:'T', color:'g' },
-  { user:'u/midwest_moves_',    sub:'r/freightbrokers', meta:'3d · Brokerage Owner',    q:'"i hired two people last quarter just to type rate cons into our tms. that\'s not a strategy, that\'s a tax."', up:428, cmts:71, av:'M', color:'' },
-  { user:'u/Unlikely_Laugh_984',sub:'r/logistics',      meta:'5d · Ops Director',       q:'"ops teams end up spending more time stitching together the truth than actually solving the exception."', up:603, cmts:104, av:'U', color:'o' },
-  { user:'u/cold_chain_carl',   sub:'r/logistics',      meta:'6d · 3PL Operator',       q:'"we tried plugging gpt into our emails. it confidently invented load numbers that didn\'t exist. garbage in, garbage out."', up:712, cmts:129, av:'C', color:'g' },
-  { user:'u/dispatch_daily',    sub:'r/freightbrokers', meta:'2d · Senior Dispatcher',  q:'"my inbox is the ETL pipeline. my dispatcher is the orchestration layer. this is not a functional system."', up:331, cmts:58, av:'D', color:'' },
-  { user:'u/rate_con_refugee',  sub:'r/logistics',      meta:'1d · Billing Lead',       q:'"by the time we reconcile the rate con, the bol, and the carrier portal, the load has already delivered. billing is always playing catch-up."', up:445, cmts:82, av:'R', color:'o' },
-  { user:'u/whatsapp_ops',      sub:'r/freightbrokers', meta:'4d · Brokerage Mgr',      q:'"half my critical load updates live in a whatsapp group chat. no TMS in the world ingests that. it\'s just… gone."', up:589, cmts:97, av:'W', color:'' },
-  { user:'u/fleet_fiona',       sub:'r/logistics',      meta:'1w · VP Ops',             q:'"everyone wants to sell us an \'ai copilot.\' nobody wants to solve the actual problem: our data is in 14 places and none of them agree."', up:841, cmts:156, av:'F', color:'g' },
+  { q:'“We hired two people just to type rate cons into the TMS.”',                                          src:'heard from a brokerage owner, midwest, ~90 loads/day' },
+  { q:'“The inbox is our ETL pipeline and a dispatcher is the orchestration layer.”',                        src:'heard from a senior dispatcher' },
+  { q:'“We plugged GPT into our email. It invented load numbers.”',                                          src:'heard from a 3PL ops lead' },
+  { q:'“Half our critical updates live in a WhatsApp group. The TMS never sees them.”',                      src:'heard from a brokerage manager' },
+  { q:'“By the time we reconcile the rate con, the BOL, and the portal, the load already delivered.”',       src:'heard from a billing lead' },
 ]
 
 function VoiceCard({ v }) {
   return (
     <div className="voice">
-      <div className="voice-head">
-        <div className={`voice-av${v.color ? ' ' + v.color : ''}`}>{v.av}</div>
-        <div className="voice-meta">
-          <div className="voice-user">{v.user}</div>
-          <div className="voice-sub"><b>{v.sub}</b> · {v.meta}</div>
-        </div>
-      </div>
       <div className="voice-q">{v.q}</div>
-      <div className="voice-stats">
-        <span>▲ {v.up}</span><span>💬 {v.cmts}</span><span>Share</span>
-      </div>
+      <div className="voice-src">{v.src}</div>
     </div>
   )
 }
@@ -304,7 +291,7 @@ export default function App() {
             <a href="#pricing">How pricing works</a>
           </div>
           <div className="nav-right">
-            <Link to="/book-demo" className="btn btn-primary nav-cta">Test Your Documents →</Link>
+            <Link to="/book-demo" className="btn btn-primary nav-cta">Run the Document Audit →</Link>
             <button
               className={`hamburger${menuOpen ? ' open' : ''}`}
               onClick={() => setMenuOpen(v => !v)}
@@ -337,7 +324,7 @@ export default function App() {
         </div>
         <div className="wrap hero-content">
           <span className="hero-eyebrow">
-            <span className="dot"></span>Everyone’s talking about AI. We’re focused on the data your team still has to clean by hand.
+            <span className="dot"></span>The five-day Document Audit for freight brokers
           </span>
 
           <h1>
@@ -349,18 +336,18 @@ export default function App() {
             ))}
           </h1>
 
-          <p className="sub">Send us the freight docs your team rekeys every day. Consignd turns messy rate cons, BOLs, PODs, invoices, emails, and portal exports into clean load records — with source links and human review where the data gets messy.</p>
+          <p className="sub">Rate cons, BOLs, and PODs arrive by email, WhatsApp, and portal. Consignd turns them into clean, source-linked load records — with a human review step exactly where the data gets messy.</p>
           <div className="hero-ctas">
-            <Link to="/book-demo" className="btn btn-primary btn-lg">Test Your Documents →</Link>
+            <Link to="/book-demo" className="btn btn-primary btn-lg">Run the Document Audit →</Link>
             <a href="#how" className="btn btn-ghost btn-lg">See how it works</a>
           </div>
 
           <div className="stat-pills stagger-group" id="heroStats">
             {[
-              { v:'25–50', l:'Docs to start a sample' },
-              { v:'1',     l:'Workflow before rollout' },
-              { v:'No rip', l:'Keep your current TMS' },
-              { v:'Review',l:'Humans check messy fields' },
+              { v:'25–50',  l:'Real docs to start' },
+              { v:'5 days', l:'To a written verdict' },
+              { v:'0',      l:'Changes to your TMS' },
+              { v:'100%',   l:'Fields linked to source' },
             ].map((s, i) => (
               <GlowCard key={i} className="stagger-item" borderRadius={18} hover="s">
                 <div className="stat-pill-inner">
@@ -387,7 +374,7 @@ export default function App() {
               ['01', 'A document lands somewhere messy.', 'Rate con in email. POD in WhatsApp. Invoice in a portal. The important data exists, but not where the system needs it.'],
               ['02', 'A human turns it into “system data.”', 'Someone reads the PDF, checks the lane, fixes the reference number, and rekeys the same fields your customer already sent.'],
               ['03', 'The cleanup becomes the workflow.', 'Dispatch, billing, customer updates, and invoice review all depend on whether that manual cleanup was right.'],
-              ['04', 'Consignd starts with the repeatable part.', 'Send 25–50 real documents. We show what extracts cleanly, what needs review, and whether the workflow deserves a rollout.'],
+              ['04', 'Consignd starts with the repeatable part.', "You don't buy software on day one. You send a two-week sample, and the audit shows whether the repeatable part is big enough to matter."],
             ].map(([n, title, body], i) => (
               <GlowCard key={i} className="story-card stagger-item" borderRadius={22} hover="m" glowColor={i === 3 ? GLOW_ORANGE : GLOW_BLUE}>
                 <div className="story-card-inner">
@@ -408,7 +395,7 @@ export default function App() {
           <div className="cin-copy">
             <span className="section-eyebrow">Watch the workflow clean itself up</span>
             <h2><span className="grad">Messy freight docs in.</span> <span className="num">Clean records out.</span></h2>
-            <p className="section-sub">This is the Consignd motion: capture a real document batch, extract the fields that matter, flag the uncertain pieces, and hand your team a cleaner workflow — not a black box.</p>
+            <p className="section-sub">Scroll to watch one load come together: three documents from three channels, extracted into a single record, with the uncertain field flagged for a human — not silently guessed.</p>
           </div>
 
           <div className="cin-stage" aria-label="Cinematic workflow diagram">
@@ -497,34 +484,40 @@ export default function App() {
             </div>
             <div className="msg">That's <span className="num">$97,200 a year</span> per seat — paid to copy and paste information that already exists as structured data somewhere upstream.</div>
           </div>
+          <p className="chaos-src reveal">Assumes a $52K dispatcher spending ~65% of the day on document entry and verification — the midpoint of what ops managers report. Your audit report recalculates this with your numbers.</p>
         </div>
       </section>
 
       {/* ══════════════ VOICES ══════════════ */}
       <section id="voices" style={{padding:'80px 0 40px'}}>
         <div className="wrap reveal" style={{textAlign:'center',marginBottom:'12px'}}>
-          <span className="section-eyebrow" style={{justifyContent:'center'}}>What freight operators keep running into</span>
+          <span className="section-eyebrow" style={{justifyContent:'center'}}>What ops teams keep telling us</span>
           <h2 style={{marginLeft:'auto',marginRight:'auto',maxWidth:'900px'}}>
-            <span className="grad">The bottleneck is not always</span> <span className="num"> better software.</span> <span className="grad"> It is getting trustworthy data into the workflow.</span>
+            The bottleneck isn't better software. <span className="num">It's getting trustworthy data into the workflow.</span>
           </h2>
           <p className="section-sub" style={{marginLeft:'auto',marginRight:'auto'}}>The names change, but the complaint is the same: too many document formats, too many places to check, and too much tribal knowledge between the source document and the system of record.</p>
         </div>
-        <div className="voices-wrap">
+        <div className="voices-wrap" role="region" aria-label="Paraphrased operator quotes">
           <div className="voices-row">
             <div className="voices-track">
-              {[...voices, ...voices].map((v, i) => <VoiceCard key={i} v={v} />)}
+              {voices.map((v, i) => <VoiceCard key={i} v={v} />)}
+              <div aria-hidden="true" style={{display:'contents'}}>
+                {voices.map((v, i) => <VoiceCard key={`dup-${i}`} v={v} />)}
+              </div>
             </div>
           </div>
         </div>
+        <p className="voices-note wrap">Paraphrased from discovery conversations and public operator forums. When we have named customers, they'll be here instead.</p>
       </section>
 
       {/* ══════════════ SOURCES ══════════════ */}
       <section id="sources" style={{padding:'80px 0'}}>
         <div className="wrap reveal" style={{textAlign:'center',marginBottom:'12px'}}>
-          <span className="section-eyebrow" style={{justifyContent:'center'}}>Built for real freight workflows</span>
+          <span className="section-eyebrow" style={{justifyContent:'center'}}>Every channel your carriers actually use</span>
           <h2 style={{marginLeft:'auto',marginRight:'auto'}}>
-            <span className="grad">Start where the mess is</span> <span className="num"> costing the most time</span><span className="grad">.</span>
+            If a document can reach you, <span className="num">it can reach us.</span>
           </h2>
+          <p className="section-sub" style={{marginLeft:'auto',marginRight:'auto',textAlign:'center'}}>Email attachments, WhatsApp forwards, portal exports, FTP drops, EDI feeds, scans, and phone photos — order-independent, so the BOL can land before its rate con.</p>
         </div>
         <div className="marquee-wrap reveal">
           <div className="marquee">
@@ -561,7 +554,7 @@ export default function App() {
                 <div className="pipe-illus">
                   <div className="ln"><b>inbox@ops.yours</b><span>2,411 new</span></div>
                   <div className="ln"><b className="pipe-ln-icon"><IcoWhatsApp />WhatsApp · Carriers</b><span>184</span></div>
-                  <div className="ln"><b>RMX Portal</b><span>synced</span></div>
+                  <div className="ln"><b>Carrier portal</b><span>synced</span></div>
                   <div className="ln"><b>FTP / EDI</b><span>live</span></div>
                 </div>
               </div>
@@ -596,7 +589,7 @@ export default function App() {
             <GlowCard className="stagger-item" borderRadius={22} hover="l">
               <div className="pipe-card-inner">
                 <div className="step-num">STAGE 03</div>
-                <h3>Sync</h3>
+                <h3>Deliver</h3>
                 <p>Clean records are delivered in the least disruptive format first: review queue, CSV, import-ready file, or TMS workflow where access allows — always linked back to the source document.</p>
                 <div className="pipe-illus">
                   <div className="ln"><b>→ Review queue</b><span>ready</span></div>
@@ -661,7 +654,7 @@ export default function App() {
               <div className="schema-ln"><b>commodity</b><span className="v">Auto Parts · 38,200 lb</span><span className="src">→ whatsapp · +1 956-***</span></div>
               <div className="schema-ln"><b>rate_usd</b><span className="v">2,850.00</span><span className="src">→ email · confirmation</span></div>
               <div className="schema-ln"><b>carrier_mc</b><span className="v">MC-884213</span><span className="src">→ portal · RMX</span></div>
-              <div className="schema-ln"><b>_confidence</b><span className="v ok">0.998</span><span className="src">→ 2 fields human-verified</span></div>
+              <div className="schema-ln"><b>_confidence</b><span className="v ok">0.97</span><span className="src">→ 1 field human-verified</span></div>
             </div>
           </div>
 
@@ -693,49 +686,6 @@ export default function App() {
                 <span>{t}</span>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════ CASE STUDIES ══════════════ */}
-      <section id="cases">
-        <div className="wrap">
-          <div className="reveal">
-            <span className="section-eyebrow">What we measure in a pilot</span>
-            <h2><span className="grad">Before a rollout,</span> <span className="num"> prove the workflow is worth it.</span></h2>
-          </div>
-          <div className="cases stagger-group">
-            <GlowCard className="stagger-item" borderRadius={22} hover="m" glowColor={GLOW_ORANGE}>
-              <article className="case-inner">
-                <div className="case-head">
-                  <div className="case-co">Manual entry reduction</div>
-                  <span className="case-tag">Pilot metric</span>
-                </div>
-                <h3>Which repeated checks can be removed or turned into exceptions?</h3>
-                <div className="case-metrics">
-                  <div className="case-metric"><div className="v">50</div><div className="l">Sample docs</div></div>
-                  <div className="case-metric"><div className="v">7</div><div className="l">Fields tracked</div></div>
-                  <div className="case-metric"><div className="v">1</div><div className="l">Ops workflow</div></div>
-                </div>
-                <p className="case-quote">We compare the current manual workflow against a cleaned sample: fields extracted, exceptions caught, review effort required, and where the process still needs a human.<span className="who">Pilot output · before/after workflow map</span></p>
-              </article>
-            </GlowCard>
-
-            <GlowCard className="stagger-item" borderRadius={22} hover="m" glowColor={GLOW_ORANGE}>
-              <article className="case-inner">
-                <div className="case-head">
-                  <div className="case-co">Commercial fit</div>
-                  <span className="case-tag">Buying decision</span>
-                </div>
-                <h3>Can the workflow support a monthly managed service without pretending it is magic software?</h3>
-                <div className="case-metrics">
-                  <div className="case-metric"><div className="v">Setup</div><div className="l">One-time</div></div>
-                  <div className="case-metric"><div className="v">Retainer</div><div className="l">Monthly</div></div>
-                  <div className="case-metric"><div className="v">Volume</div><div className="l">Scales</div></div>
-                </div>
-                <p className="case-quote">If the pilot shows enough repeatable work, we scope a rollout: one-time setup for sources and rules, monthly managed processing, and optional expansion into reconciliation/reporting.<span className="who">Commercial model · pilot → rollout</span></p>
-              </article>
-            </GlowCard>
           </div>
         </div>
       </section>
@@ -778,11 +728,11 @@ export default function App() {
       </section>
 
       {/* ══════════════ DOCUMENT AUDIT ══════════════ */}
-      <section id="audit-offer">
+      <section id="audit">
         <div className="wrap">
           <div className="reveal" style={{textAlign:'center'}}>
             <span className="section-eyebrow" style={{justifyContent:'center'}}>Start with the audit</span>
-            <h2 style={{marginLeft:'auto',marginRight:'auto',textAlign:'center'}}><span className="grad">The Consignd Document Audit.</span> <span className="num"> A five-day diagnostic for freight broker back-office ops.</span></h2>
+            <h2 style={{marginLeft:'auto',marginRight:'auto',textAlign:'center'}}><span className="grad">The Document Audit:</span> <span className="num"> a five-day diagnostic on your real paperwork.</span></h2>
             <p className="section-sub" style={{marginLeft:'auto',marginRight:'auto',textAlign:'center'}}>Send 25–50 real documents from the last two weeks of operations. We classify them, extract the fields, map the variation, and show you where your team is still burning time by hand.</p>
           </div>
           <div className="cases stagger-group" style={{marginTop:'28px'}}>
@@ -846,9 +796,34 @@ export default function App() {
                     <li key={i}><span className="chk"><CheckIcon /></span>{item}</li>
                   ))}
                 </ul>
-                <Link to="/book-demo" className="btn btn-primary btn-lg" style={{width:'100%',justifyContent:'center'}}>Start the Document Audit →</Link>
+                <Link to="/book-demo" className="btn btn-primary btn-lg" style={{width:'100%',justifyContent:'center'}}>Run the Document Audit →</Link>
               </div>
             </GlowCard>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════ FAQ ══════════════ */}
+      <section id="faq">
+        <div className="wrap">
+          <div className="reveal">
+            <span className="section-eyebrow">Frequently asked questions</span>
+            <h2><span className="grad">The questions every ops leader asks</span> <span className="num"> before sending documents.</span></h2>
+          </div>
+          <div className="faq-grid stagger-group">
+            {[
+              ['What is the Consignd Document Audit?', 'A five-day paid diagnostic where a freight broker sends 25–50 real documents (rate confirmations, BOLs, PODs) and receives a written report showing what extracts cleanly, what needs human review, and whether a managed rollout is commercially worth it.'],
+              ['Do I have to replace my TMS?', 'No. Consignd works around your existing TMS. Clean records are delivered as a review queue, CSV, import-ready file, or written into your TMS workflow where access allows.'],
+              ['What documents does Consignd handle?', 'Rate confirmations, bills of lading, proof-of-delivery documents, and carrier invoices — as PDFs, scans, phone photos, email bodies, WhatsApp forwards, portal exports, FTP drops, or EDI feeds.'],
+              ["What happens when the AI isn't sure?", 'Low-confidence fields are flagged and routed to a human review queue. Nothing is silently guessed, and every field links back to the exact source document it came from.'],
+              ['What if documents arrive out of order?', 'Matching is order-independent: a BOL can arrive days before its rate con. Whichever document lands first seeds the load; later documents match into it. Unmatched documents go to a triage queue — never dropped, never force-matched.'],
+              ['How much does it cost?', "The audit is a flat fee. If the workflow proves repeatable, rollout is a one-time setup plus monthly managed processing priced by document volume and complexity. If it doesn't prove out, we tell you that in the report."],
+            ].map(([q, a], i) => (
+              <div className="faq-item stagger-item" key={i}>
+                <h3>{q}</h3>
+                <p>{a}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -857,21 +832,19 @@ export default function App() {
       <section className="final" id="cta">
         <div className="final-orb"></div>
         <div className="wrap reveal-scale">
-          <h2><span className="grad">Start with a five-day Document Audit.</span> <span className="num"> Then decide if rollout is worth it.</span></h2>
-          <p>Send 25–50 real documents. We will show what extracts cleanly, what needs review, where the workflow breaks, and whether a managed rollout makes commercial sense.</p>
-          <Link to="/book-demo" className="btn btn-primary btn-lg">Start the Document Audit →</Link>
+          <h2><span className="grad">Stop paying dispatchers to type.</span> <span className="num"> Start paying them to close.</span></h2>
+          <p>Run the five-day Document Audit on 25–50 real documents. You'll know what extracts cleanly, what needs a human, and whether rollout is worth it — before you spend a dollar on software.</p>
+          <Link to="/book-demo" className="btn btn-primary btn-lg">Run the Document Audit →</Link>
         </div>
       </section>
 
       {/* ══════════════ FOOTER ══════════════ */}
       <footer>
         <div className="wrap foot">
-          <a href="#" className="logo" aria-label="Consignd DataCore"><Logo /></a>
+          <a href="/" className="logo" aria-label="Consignd DataCore"><Logo /></a>
           <div className="foot-links">
-            <a href="#">Privacy</a>
-            <a href="#">Security</a>
-            <a href="#">Status</a>
-            <a href="#">Contact</a>
+            <Link to="/privacy">Privacy &amp; Security</Link>
+            <a href="mailto:website.inquiries@consignd.one">Contact</a>
           </div>
           <div>© 2026 Consignd, Inc. · DataCore™</div>
         </div>

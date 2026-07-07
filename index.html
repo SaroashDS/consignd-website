@@ -33,6 +33,17 @@
           "email": "website.inquiries@consignd.one"
         },
         {
+          "@type": "FAQPage",
+          "mainEntity": [
+            { "@type": "Question", "name": "What is the Consignd Document Audit?", "acceptedAnswer": { "@type": "Answer", "text": "A five-day paid diagnostic where a freight broker sends 25–50 real documents (rate confirmations, BOLs, PODs) and receives a written report showing what extracts cleanly, what needs human review, and whether a managed rollout is commercially worth it." } },
+            { "@type": "Question", "name": "Do I have to replace my TMS?", "acceptedAnswer": { "@type": "Answer", "text": "No. Consignd works around your existing TMS. Clean records are delivered as a review queue, CSV, import-ready file, or written into your TMS workflow where access allows." } },
+            { "@type": "Question", "name": "What documents does Consignd handle?", "acceptedAnswer": { "@type": "Answer", "text": "Rate confirmations, bills of lading, proof-of-delivery documents, and carrier invoices — as PDFs, scans, phone photos, email bodies, WhatsApp forwards, portal exports, FTP drops, or EDI feeds." } },
+            { "@type": "Question", "name": "What happens when the AI isn't sure?", "acceptedAnswer": { "@type": "Answer", "text": "Low-confidence fields are flagged and routed to a human review queue. Nothing is silently guessed, and every field links back to the exact source document it came from." } },
+            { "@type": "Question", "name": "What if documents arrive out of order?", "acceptedAnswer": { "@type": "Answer", "text": "Matching is order-independent: a BOL can arrive days before its rate con. Whichever document lands first seeds the load; later documents match into it. Unmatched documents go to a triage queue — never dropped, never force-matched." } },
+            { "@type": "Question", "name": "How much does it cost?", "acceptedAnswer": { "@type": "Answer", "text": "The audit is a flat fee. If the workflow proves repeatable, rollout is a one-time setup plus monthly managed processing priced by document volume and complexity. If it doesn't prove out, we tell you that in the report." } }
+          ]
+        },
+        {
           "@type": "Service",
           "name": "Consignd Document Audit",
           "serviceType": "Freight document processing",
