@@ -360,7 +360,7 @@ export default function BookDemo() {
             <a href="#">Security</a>
             <a href={`mailto:${TEAM_EMAIL}`}>Contact</a>
           </div>
-          <div>© 2026 Consignd, Inc. · DataCore®</div>
+          <div>© 2026 Consignd, Inc. · DataCore™</div>
         </div>
       </footer>
     </>

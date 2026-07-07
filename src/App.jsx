@@ -64,56 +64,6 @@ const IcoCamera = () => (
   </svg>
 )
 
-/* ─── TMS logo marks ────────────────────────────────────────────── */
-const MarkRoseRocket = () => (
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-    <rect width="28" height="28" rx="6" fill="rgba(255,80,20,0.16)"/>
-    <path d="M14 4.5s5 3.5 5 8.5l-2.5 2.5L14 14.5l-2.5 1L9 13C9 8 14 4.5 14 4.5z" fill="#FF5014"/>
-    <circle cx="14" cy="11" r="1.8" fill="white"/>
-    <path d="M11.5 15.5L10 20l4-2 4 2-1.5-4.5" fill="#FF5014" opacity="0.6"/>
-    <path d="M9 13l-2.5 1.5 1.5-2.5" fill="#FF5014" opacity="0.45"/>
-    <path d="M19 13l2.5 1.5-1.5-2.5" fill="#FF5014" opacity="0.45"/>
-  </svg>
-)
-const MarkAlvys = () => (
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-    <rect width="28" height="28" rx="6" fill="rgba(79,70,229,0.15)"/>
-    <path d="M14 6L21 21H7L14 6Z" fill="none" stroke="#4F46E5" strokeWidth="2" strokeLinejoin="round"/>
-    <path d="M9.5 16.5h9" stroke="#4F46E5" strokeWidth="2" strokeLinecap="round"/>
-  </svg>
-)
-const MarkTurvo = () => (
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-    <rect width="28" height="28" rx="6" fill="rgba(124,58,237,0.15)"/>
-    <circle cx="14" cy="8" r="2.5" fill="#7C3AED"/>
-    <circle cx="7.5" cy="19" r="2.5" fill="#7C3AED"/>
-    <circle cx="20.5" cy="19" r="2.5" fill="#7C3AED"/>
-    <path d="M14 10.5L7.5 16.5M14 10.5L20.5 16.5M7.5 19h13" stroke="#7C3AED" strokeWidth="1.5" opacity="0.55"/>
-  </svg>
-)
-const MarkMcLeod = () => (
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-    <rect width="28" height="28" rx="6" fill="rgba(29,78,216,0.15)"/>
-    <path d="M5.5 21V8.5L14 16.5l8.5-8V21" stroke="#1D4ED8" strokeWidth="2.2" strokeLinejoin="round" strokeLinecap="round" fill="none"/>
-  </svg>
-)
-const MarkTai = () => (
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-    <rect width="28" height="28" rx="6" fill="rgba(245,158,11,0.15)"/>
-    <path d="M6.5 9h15M14 9v11" stroke="#D97706" strokeWidth="2.5" strokeLinecap="round"/>
-    <circle cx="20" cy="20" r="2.5" fill="#D97706" opacity="0.5"/>
-  </svg>
-)
-const MarkAscend = () => (
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-    <rect width="28" height="28" rx="6" fill="rgba(5,150,105,0.14)"/>
-    <rect x="5.5" y="17" width="4.5" height="6" rx="1.2" fill="#059669"/>
-    <rect x="11.5" y="13" width="4.5" height="10" rx="1.2" fill="#059669"/>
-    <rect x="17.5" y="9" width="4.5" height="14" rx="1.2" fill="#059669"/>
-    <polyline points="7.75,16 12,11 16.25,13.5 21,7" stroke="#059669" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0.45"/>
-  </svg>
-)
-
 /* ─── Voices data ───────────────────────────────────────────────── */
 const voices = [
   { user:'u/Equal-Hair3068',    sub:'r/logistics',      meta:'2d · Ops Manager',       q:'"still manually cross-referencing three different systems just to figure out if a load actually delivered on time."', up:247, cmts:42, av:'E', color:'' },
@@ -157,15 +107,9 @@ const srcPills = [
   { ico:<IcoCamera />,   label:'Photographed Documents', icoStyle:{background:'rgba(245,158,11,0.14)',borderColor:'rgba(245,158,11,0.3)',color:'#fbbf24'} },
 ]
 
-/* ─── TMS entries with custom marks ─────────────────────────────── */
-const TMS_ENTRIES = [
-  { name:'Rose Rocket', mark:<MarkRoseRocket /> },
-  { name:'Alvys',       mark:<MarkAlvys /> },
-  { name:'Turvo',       mark:<MarkTurvo /> },
-  { name:'McLeod',      mark:<MarkMcLeod /> },
-  { name:'Tai TMS',     mark:<MarkTai /> },
-  { name:'AscendTMS',   mark:<MarkAscend /> },
-]
+/* Text-only chips: naming TMS platforms is nominative fair use; rendering
+   lookalike logos is not. */
+const TMS_ENTRIES = ['Rose Rocket', 'Alvys', 'Turvo', 'McLeod', 'Tai TMS', 'AscendTMS']
 
 /* ─── Hero headline — only "Closing Loads." gets the gradient ───── */
 const headline = [
@@ -746,7 +690,7 @@ export default function App() {
           <div className="tms-strip stagger-group">
             {TMS_ENTRIES.map((t, i) => (
               <div className="tms-chip stagger-item" key={i}>
-                {t.mark}<span>{t.name}</span>
+                <span>{t}</span>
               </div>
             ))}
           </div>
@@ -929,7 +873,7 @@ export default function App() {
             <a href="#">Status</a>
             <a href="#">Contact</a>
           </div>
-          <div>© 2026 Consignd, Inc. · DataCore®</div>
+          <div>© 2026 Consignd, Inc. · DataCore™</div>
         </div>
       </footer>
     </>
