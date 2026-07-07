@@ -345,15 +345,15 @@ export default function App() {
       {/* ── Nav ── */}
       <nav className="nav" id="nav">
         <div className="nav-inner">
-          <a href="#" className="logo" aria-label="Consignd DataCore">
+          <a href="/" className="logo" aria-label="Consignd DataCore">
             <Logo />
           </a>
           <div className="nav-links">
-            <a href="#" onClick={e=>{e.preventDefault();document.getElementById('problem')?.scrollIntoView({behavior:'smooth'})}}>Problem</a>
-            <a href="#" onClick={e=>{e.preventDefault();document.getElementById('sources')?.scrollIntoView({behavior:'smooth'})}}>Sources</a>
-            <a href="#" onClick={e=>{e.preventDefault();document.getElementById('how')?.scrollIntoView({behavior:'smooth'})}}>How it works</a>
-            <a href="#" onClick={e=>{e.preventDefault();document.getElementById('cases')?.scrollIntoView({behavior:'smooth'})}}>Results</a>
-            <a href="#" onClick={e=>{e.preventDefault();document.getElementById('pricing')?.scrollIntoView({behavior:'smooth'})}}>Pricing</a>
+            <a href="#problem">Problem</a>
+            <a href="#sources">What we ingest</a>
+            <a href="#how">How it works</a>
+            <a href="#audit">The pilot</a>
+            <a href="#pricing">How pricing works</a>
           </div>
           <div className="nav-right">
             <Link to="/book-demo" className="btn btn-primary nav-cta">Test Your Documents →</Link>
@@ -368,12 +368,12 @@ export default function App() {
           </div>
         </div>
         <div className={`mobile-menu${menuOpen ? ' open' : ''}`}>
-          <a href="#" onClick={e=>{e.preventDefault();closeMenu();setTimeout(()=>document.getElementById('problem')?.scrollIntoView({behavior:'smooth'}),120)}}>Problem</a>
-          <a href="#" onClick={e=>{e.preventDefault();closeMenu();setTimeout(()=>document.getElementById('sources')?.scrollIntoView({behavior:'smooth'}),120)}}>Sources</a>
-          <a href="#" onClick={e=>{e.preventDefault();closeMenu();setTimeout(()=>document.getElementById('how')?.scrollIntoView({behavior:'smooth'}),120)}}>How it works</a>
-          <a href="#" onClick={e=>{e.preventDefault();closeMenu();setTimeout(()=>document.getElementById('cases')?.scrollIntoView({behavior:'smooth'}),120)}}>Results</a>
-          <a href="#" onClick={e=>{e.preventDefault();closeMenu();setTimeout(()=>document.getElementById('pricing')?.scrollIntoView({behavior:'smooth'}),120)}}>Pricing</a>
-          <Link to="/book-demo" className="btn btn-primary" style={{width:'100%',justifyContent:'center',marginTop:'8px'}} onClick={closeMenu}>Test Your Documents →</Link>
+          <a href="#problem" onClick={closeMenu}>Problem</a>
+          <a href="#sources" onClick={closeMenu}>What we ingest</a>
+          <a href="#how" onClick={closeMenu}>How it works</a>
+          <a href="#audit" onClick={closeMenu}>The pilot</a>
+          <a href="#pricing" onClick={closeMenu}>How pricing works</a>
+          <Link to="/book-demo" className="btn btn-primary" style={{width:'100%',justifyContent:'center',marginTop:'8px'}} onClick={closeMenu}>Run the Document Audit →</Link>
         </div>
       </nav>
 
@@ -404,7 +404,7 @@ export default function App() {
           <p className="sub">Send us the freight docs your team rekeys every day. Consignd turns messy rate cons, BOLs, PODs, invoices, emails, and portal exports into clean load records — with source links and human review where the data gets messy.</p>
           <div className="hero-ctas">
             <Link to="/book-demo" className="btn btn-primary btn-lg">Test Your Documents →</Link>
-            <a href="#" className="btn btn-ghost btn-lg" onClick={e=>{e.preventDefault();document.getElementById('how')?.scrollIntoView({behavior:'smooth'})}}>See the workflow</a>
+            <a href="#how" className="btn btn-ghost btn-lg">See how it works</a>
           </div>
 
           <div className="stat-pills stagger-group" id="heroStats">

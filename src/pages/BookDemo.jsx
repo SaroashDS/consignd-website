@@ -181,9 +181,6 @@ export default function BookDemo() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  /* scroll to top on mount */
-  useEffect(() => { window.scrollTo(0, 0) }, [])
-
   return (
     <>
       {/* ── Grainient background ── */}
@@ -223,10 +220,10 @@ export default function BookDemo() {
           </Link>
           <div className="nav-links">
             <Link to="/#problem">Problem</Link>
-            <Link to="/#sources">Sources</Link>
+            <Link to="/#sources">What we ingest</Link>
             <Link to="/#how">How it works</Link>
-            <Link to="/#cases">Results</Link>
-            <Link to="/#pricing">Pricing</Link>
+            <Link to="/#audit">The pilot</Link>
+            <Link to="/#pricing">How pricing works</Link>
           </div>
           <div className="nav-right">
             <Link to="/" className="btn btn-ghost nav-cta" style={{fontSize:'13px',padding:'9px 16px'}}>← Back to site</Link>
@@ -234,6 +231,7 @@ export default function BookDemo() {
               className={`hamburger${menuOpen ? ' open' : ''}`}
               onClick={() => setMenuOpen(v => !v)}
               aria-label="Toggle menu"
+              aria-expanded={menuOpen}
             >
               <span /><span /><span />
             </button>
