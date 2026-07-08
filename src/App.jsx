@@ -326,6 +326,54 @@ export default function App() {
         </div>
       </section>
 
+      {/* ══════════════ PRODUCT FRAME — the portal, shown not described ══════ */}
+      <section className="pframe-section">
+        <div className="wrap reveal-scale">
+          <div className="pframe" role="img" aria-label="Consignd portal data card: extracted load fields with one flagged rate mismatch awaiting review">
+            <div className="pframe-bar">
+              <span className="dots" aria-hidden="true"><i /><i /><i /></span>
+              <span className="url">portal.consignd.one / review / DEMO-48219</span>
+              <span className="env">demo data</span>
+            </div>
+            <div className="pframe-body">
+              <div className="pframe-main">
+                <div className="pframe-load">
+                  <b>load DEMO-48219 · Laredo, TX → Chicago, IL</b>
+                  <span className="pframe-status">needs review</span>
+                </div>
+                {[
+                  ['pickup', 'Laredo, TX · 04/23 08:00', 'rate_con.pdf'],
+                  ['delivery', 'Chicago, IL · 04/25 14:00', 'rate_con.pdf'],
+                  ['commodity', 'Auto Parts · 38,200 lb', 'whatsapp'],
+                  ['carrier_mc', 'MC-884213', 'email'],
+                ].map(([f, v, src]) => (
+                  <div className="pframe-row" key={f}>
+                    <b>{f}</b><span>{v}</span><span className="src">→ {src}</span>
+                  </div>
+                ))}
+                <div className="pframe-row flagged">
+                  <b>rate_usd</b><span>2,850.00 ≠ 3,025.00</span><span className="src">→ 2 sources</span>
+                </div>
+                <div className="pframe-verified">✓ 4 of 5 fields extracted clean · 1 flagged for a human</div>
+              </div>
+              <div className="pframe-side">
+                <h4>Flag · rate mismatch</h4>
+                <div className="pframe-flag">
+                  <b>Why these disagree</b>
+                  The rate con shows $2,850. The carrier invoice shows $3,025 — the difference is a $175 detention accessorial added after delivery.
+                </div>
+                <div className="pframe-actions">
+                  <span className="act primary">Accept rate con</span>
+                  <span className="act">Accept invoice</span>
+                  <span className="act">Send to triage</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p className="pframe-caption">The review surface your team actually uses — every field linked to its source document.</p>
+        </div>
+      </section>
+
       {/* ══════════════ STORY ══════════════ */}
       <section id="story" className="story-section">
         <div className="wrap">
@@ -451,6 +499,15 @@ export default function App() {
             <div className="msg">That's <span className="num">$97,200 a year</span> per seat — paid to copy and paste information that already exists as structured data somewhere upstream.</div>
           </div>
           <p className="chaos-src reveal">Assumes a $52K dispatcher spending ~65% of the day on document entry and verification — the midpoint of what ops managers report. Your audit report recalculates this with your numbers.</p>
+        </div>
+      </section>
+
+      {/* ══════════════ POSITION STATEMENT ══════════════ */}
+      <section className="statement">
+        <div className="wrap reveal">
+          <span className="kicker">The position</span>
+          <h2>You don't need more AI. You need a <em>data layer you can trust.</em></h2>
+          <p>Consignd is the layer between your inbox and your TMS — deterministic where it must be, AI where it helps, human where it matters.</p>
         </div>
       </section>
 
@@ -619,7 +676,7 @@ export default function App() {
               <div className="schema-ln"><b>delivery</b><span className="v">Chicago, IL · 04/25 14:00</span><span className="src">→ pdf · rate_con.pdf</span></div>
               <div className="schema-ln"><b>commodity</b><span className="v">Auto Parts · 38,200 lb</span><span className="src">→ whatsapp · +1 956-***</span></div>
               <div className="schema-ln"><b>rate_usd</b><span className="v">2,850.00</span><span className="src">→ email · confirmation</span></div>
-              <div className="schema-ln"><b>carrier_mc</b><span className="v">MC-884213</span><span className="src">→ portal · RMX</span></div>
+              <div className="schema-ln"><b>carrier_mc</b><span className="v">MC-884213</span><span className="src">→ portal · carrier</span></div>
               <div className="schema-ln"><b>_confidence</b><span className="v ok">0.97</span><span className="src">→ 1 field human-verified</span></div>
             </div>
           </div>

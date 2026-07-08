@@ -12,7 +12,7 @@ const Logo = () => (
     </svg>
     <span className="logo-text">
       <span className="logo-name">consignd</span>
-      <span className="logo-sub">DataCore®</span>
+      <span className="logo-sub">DataCore™</span>
     </span>
   </span>
 )
