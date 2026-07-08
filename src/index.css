@@ -1,6 +1,9 @@
 :root {
-  --bg: #020B18;
-  --bg-2: #030F22;
+  --bg: #0B0E13;
+  --bg-2: #11151C;
+  --surface: #151A22;
+  --line: rgba(255,255,255,0.08);
+  --line-strong: rgba(255,255,255,0.16);
   --blue: #2563EB;
   --blue-bright: #3B82F6;
   --orange: #F26522;
@@ -44,72 +47,29 @@ a { color: inherit; text-decoration: none; }
 .bg-grid {
   position: absolute; inset: -4%;
   background-image:
-    linear-gradient(rgba(147,197,253,0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(147,197,253,0.12) 1px, transparent 1px),
-    linear-gradient(rgba(242,101,34,0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(242,101,34,0.08) 1px, transparent 1px);
-  background-size: 64px 64px, 64px 64px, 256px 256px, 256px 256px;
-  background-position: 0 0, 0 0, 0 0, 0 0;
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
   mask-image: radial-gradient(1200px 800px at 50% 30%, black 36%, transparent 82%);
   -webkit-mask-image: radial-gradient(1200px 800px at 50% 30%, black 36%, transparent 82%);
-  opacity: .82;
-  filter: drop-shadow(0 0 16px rgba(59,130,246,0.08));
-  will-change: transform, opacity, background-position;
-  animation: gridDrift 22s ease-in-out infinite alternate;
 }
 .bg-noise {
-  position: absolute; inset: 0; opacity: .045; mix-blend-mode: overlay;
+  position: absolute; inset: 0; opacity: .025; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
-.bg-blob {
-  position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform;
-  animation: drift 22s ease-in-out infinite alternate;
-}
-.bg-blob.b1 { width:680px;height:680px;background:radial-gradient(circle,rgba(37,99,235,0.55),transparent 65%);top:-220px;left:-160px;animation-delay:-3s }
-.bg-blob.b2 { width:560px;height:560px;background:radial-gradient(circle,rgba(59,130,246,0.40),transparent 65%);top:35%;right:-200px;animation-delay:-8s;animation-duration:26s }
-.bg-blob.b3 { width:500px;height:500px;background:radial-gradient(circle,rgba(242,101,34,0.28),transparent 65%);top:75%;left:15%;animation-delay:-12s;animation-duration:30s }
-.bg-blob.b4 { width:620px;height:620px;background:radial-gradient(circle,rgba(37,99,235,0.35),transparent 65%);top:135%;right:5%;animation-delay:-5s;animation-duration:28s }
-.bg-blob.b5 { width:540px;height:540px;background:radial-gradient(circle,rgba(59,130,246,0.28),transparent 65%);top:210%;left:-100px;animation-delay:-9s }
-.bg-blob.b6 { width:560px;height:560px;background:radial-gradient(circle,rgba(242,101,34,0.22),transparent 65%);top:275%;right:-120px;animation-delay:-14s;animation-duration:32s }
-@keyframes drift {
-  0%   { transform: translate3d(0,0,0) scale(1); }
-  50%  { transform: translate3d(40px,-60px,0) scale(1.08); }
-  100% { transform: translate3d(-30px,40px,0) scale(0.95); }
+.bg-wash {
+  position: absolute; inset: 0;
+  background: radial-gradient(900px 600px at 50% -10%, rgba(242,101,34,0.07), transparent 70%);
 }
 
-@keyframes gridDrift {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
-    background-position: 0 0, 0 0, 0 0, 0 0;
-    opacity: 0.68;
-  }
-  50% {
-    transform: translate3d(-1.5%, -1%, 0) scale(1.02);
-    background-position: 18px 14px, 18px 14px, 6px 5px, 6px 5px;
-    opacity: 0.86;
-  }
-  100% {
-    transform: translate3d(1.25%, 1.5%, 0) scale(1.04);
-    background-position: 36px 28px, 36px 28px, 12px 10px, 12px 10px;
-    opacity: 0.72;
-  }
+/* flat card -- the default surface; glow reserved for audit + pricing */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  transition: border-color 160ms ease, transform 160ms ease;
 }
-
-.aurora {
-  position: fixed; top: -10%; left: -10%; width: 120%; height: 140%; z-index: 0; pointer-events: none;
-  background: conic-gradient(from 200deg at 50% 50%,
-    rgba(37,99,235,0) 0deg,
-    rgba(37,99,235,0.18) 60deg,
-    rgba(59,130,246,0.22) 120deg,
-    rgba(242,101,34,0.14) 200deg,
-    rgba(37,99,235,0) 280deg,
-    rgba(37,99,235,0) 360deg);
-  filter: blur(80px); opacity: .55;
-  animation: auroraSpin 40s linear infinite;
-  mask-image: radial-gradient(60% 60% at 50% 40%, black 0%, transparent 75%);
-  -webkit-mask-image: radial-gradient(60% 60% at 50% 40%, black 0%, transparent 75%);
-}
-@keyframes auroraSpin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+.card:hover { border-color: var(--line-strong); transform: translateY(-2px); }
 
 /* ---------- logo ---------- */
 .logo-mark {
@@ -120,7 +80,7 @@ a { color: inherit; text-decoration: none; }
   display: flex; flex-direction: column; line-height: 1.1; gap: 1px;
 }
 .logo-name {
-  font-family: 'Syne', 'Inter', system-ui, sans-serif;
+  font-family: 'Fraunces', Georgia, serif;
   font-size: 18px; font-weight: 700; letter-spacing: -0.04em; color: #fff;
 }
 .logo-sub {
@@ -367,8 +327,9 @@ a { color: inherit; text-decoration: none; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
 
 .hero h1 {
-  font-size: clamp(44px, 6.6vw, 88px);
-  line-height: 1.0; letter-spacing: -0.035em; font-weight: 700; margin: 0 auto; max-width: 15ch;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(42px, 6.2vw, 82px);
+  line-height: 1.02; letter-spacing: -0.02em; font-weight: 600; margin: 0 auto; max-width: 15ch;
 }
 
 /* plain white words */
@@ -378,10 +339,8 @@ a { color: inherit; text-decoration: none; }
 
 /* "Closing Loads." — colorful gradient animation */
 .hero h1 .accent {
-  background: linear-gradient(90deg, #93c5fd, #3B82F6, #6366f1, #F26522, #fb923c, #3B82F6, #93c5fd);
-  background-size: 300% 100%;
+  background: linear-gradient(90deg, #fb923c, #F26522);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  animation: heroAccentFlow 5s ease infinite;
   position: relative;
 }
 @keyframes heroAccentFlow {
@@ -452,7 +411,7 @@ section { position: relative; padding: 130px 0; }
   color: var(--blue-bright); font-weight: 600; margin-bottom: 18px;
   padding: 6px 12px; border-radius: 999px; background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.25);
 }
-h2 { font-size: clamp(34px,4.4vw,58px); line-height: 1.04; letter-spacing: -0.025em; font-weight: 700; margin: 0 0 18px; max-width: 20ch; }
+h2 { font-family: 'Fraunces', Georgia, serif; font-size: clamp(32px,4.2vw,54px); line-height: 1.08; letter-spacing: -0.015em; font-weight: 600; margin: 0 0 18px; max-width: 22ch; }
 h2 .grad {
   background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.55) 100%);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
@@ -899,8 +858,6 @@ footer { border-top: 1px solid var(--glass-bd); padding: 42px 0 58px; color: var
 
 /* Performance trim: disable the heaviest always-on motion */
 .bg-grid,
-.bg-blob,
-.aurora,
 .doc,
 .voices-track,
 .marquee-track {

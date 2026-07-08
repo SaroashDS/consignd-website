@@ -3,9 +3,12 @@
 .book-bg {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
 }
-.book-bg-overlay {
+.book-bg-gradient {
   position: absolute; inset: 0;
-  background: rgba(2,11,24,0.58);
+  background:
+    radial-gradient(1000px 700px at 50% -15%, rgba(242,101,34,0.10), transparent 65%),
+    radial-gradient(800px 600px at 85% 110%, rgba(59,130,246,0.08), transparent 60%),
+    var(--bg);
 }
 
 .book-main {

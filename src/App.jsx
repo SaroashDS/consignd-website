@@ -161,26 +161,6 @@ export default function App() {
     if (el) setTimeout(() => el.classList.add('in'), 500)
   }, [])
 
-  /* parallax floaters — translate only; CSS rotate handles tilt */
-  useEffect(() => {
-    let ticking = false
-    const floaters = document.querySelectorAll('[data-parallax]')
-    const onScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const y = window.scrollY
-          floaters.forEach(el => {
-            el.style.transform = `translate3d(0,${y * parseFloat(el.dataset.parallax)}px,0)`
-          })
-          ticking = false
-        })
-        ticking = true
-      }
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
   /* pinned cinematic workflow */
   useLayoutEffect(() => {
     const root = cinematicRef.current
@@ -263,16 +243,10 @@ export default function App() {
 
   return (
     <>
-      {/* ── Animated background ── */}
+      {/* ── Quiet background: one wash, one static grid, grain ── */}
       <div className="bg-fixed">
-        <div className="aurora"></div>
+        <div className="bg-wash"></div>
         <div className="bg-grid"></div>
-        <div className="bg-blob b1"></div>
-        <div className="bg-blob b2"></div>
-        <div className="bg-blob b3"></div>
-        <div className="bg-blob b4"></div>
-        <div className="bg-blob b5"></div>
-        <div className="bg-blob b6"></div>
         <div className="bg-noise"></div>
       </div>
       <div className="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
@@ -314,14 +288,6 @@ export default function App() {
 
       {/* ══════════════ HERO ══════════════ */}
       <section className="hero">
-        <div className="floaters" aria-hidden="true">
-          <div className="doc d1" data-parallax="0.25"><div className="bar md"></div><div className="bar sm"></div><div className="bar blue"></div><div className="bar sm"></div></div>
-          <div className="doc d2" data-parallax="-0.20"><div className="bar md"></div><div className="bar orange"></div><div className="bar sm"></div><div className="bar md"></div><div className="bar sm"></div></div>
-          <div className="doc d3" data-parallax="0.30"><div className="bar sm"></div><div className="bar md"></div><div className="bar blue"></div></div>
-          <div className="doc d4" data-parallax="-0.25"><div className="bar md"></div><div className="bar sm"></div><div className="bar md"></div><div className="bar orange"></div></div>
-          <div className="doc d5" data-parallax="0.15"><div className="bar sm"></div><div className="bar md"></div></div>
-          <div className="doc d6" data-parallax="-0.15"><div className="bar md"></div><div className="bar blue"></div></div>
-        </div>
         <div className="wrap hero-content">
           <span className="hero-eyebrow">
             <span className="dot"></span>The five-day Document Audit for freight brokers
@@ -349,12 +315,12 @@ export default function App() {
               { v:'0',      l:'Changes to your TMS' },
               { v:'100%',   l:'Fields linked to source' },
             ].map((s, i) => (
-              <GlowCard key={i} className="stagger-item" borderRadius={18} hover="s">
+              <div key={i} className="card stagger-item">
                 <div className="stat-pill-inner">
                   <div className="v"><em>{s.v}</em></div>
                   <div className="l">{s.l}</div>
                 </div>
-              </GlowCard>
+              </div>
             ))}
           </div>
         </div>
@@ -376,13 +342,13 @@ export default function App() {
               ['03', 'The cleanup becomes the workflow.', 'Dispatch, billing, customer updates, and invoice review all depend on whether that manual cleanup was right.'],
               ['04', 'Consignd starts with the repeatable part.', "You don't buy software on day one. You send a two-week sample, and the audit shows whether the repeatable part is big enough to matter."],
             ].map(([n, title, body], i) => (
-              <GlowCard key={i} className="story-card stagger-item" borderRadius={22} hover="m" glowColor={i === 3 ? GLOW_ORANGE : GLOW_BLUE}>
+              <div key={i} className="card story-card stagger-item">
                 <div className="story-card-inner">
                   <div className="story-num">{n}</div>
                   <h3>{title}</h3>
                   <p>{body}</p>
                 </div>
-              </GlowCard>
+              </div>
             ))}
           </div>
         </div>
@@ -467,13 +433,13 @@ export default function App() {
               ['06','Correct',  "Fix the typos you didn't catch. Call the broker back."],
               ['07','Repeat',   'Do it all again. 80 times. Before lunch.'],
             ].map(([n, t, d], i) => (
-              <GlowCard key={i} className="stagger-item" borderRadius={16} hover="m">
+              <div key={i} className="card stagger-item">
                 <div className="step-inner">
                   <div className="n">{n}</div>
                   <div className="t">{t}</div>
                   <div className="d">{d}</div>
                 </div>
-              </GlowCard>
+              </div>
             ))}
           </div>
 
@@ -546,7 +512,7 @@ export default function App() {
             <p className="section-sub">We do not start by promising a giant integration project. We start with one repeated document workflow, prove what can be extracted reliably, and only then design the managed rollout.</p>
           </div>
           <div className="pipe stagger-group">
-            <GlowCard className="stagger-item" borderRadius={22} hover="l">
+            <div className="card stagger-item">
               <div className="pipe-card-inner">
                 <div className="step-num">STAGE 01</div>
                 <h3>Capture</h3>
@@ -558,7 +524,7 @@ export default function App() {
                   <div className="ln"><b>FTP / EDI</b><span>live</span></div>
                 </div>
               </div>
-            </GlowCard>
+            </div>
 
             <div className="arrow stagger-item" aria-hidden="true">
               <svg viewBox="0 0 60 24" fill="none">
@@ -566,7 +532,7 @@ export default function App() {
               </svg>
             </div>
 
-            <GlowCard className="stagger-item" borderRadius={22} hover="l">
+            <div className="card stagger-item">
               <div className="pipe-card-inner">
                 <div className="step-num">STAGE 02</div>
                 <h3>Structure</h3>
@@ -578,7 +544,7 @@ export default function App() {
                   <div className="ln"><b>mc_number</b><span>MC-884213</span></div>
                 </div>
               </div>
-            </GlowCard>
+            </div>
 
             <div className="arrow stagger-item" aria-hidden="true">
               <svg viewBox="0 0 60 24" fill="none">
@@ -586,7 +552,7 @@ export default function App() {
               </svg>
             </div>
 
-            <GlowCard className="stagger-item" borderRadius={22} hover="l">
+            <div className="card stagger-item">
               <div className="pipe-card-inner">
                 <div className="step-num">STAGE 03</div>
                 <h3>Deliver</h3>
@@ -598,7 +564,7 @@ export default function App() {
                   <div className="ln"><b>audit_trail</b><span>attached</span></div>
                 </div>
               </div>
-            </GlowCard>
+            </div>
           </div>
         </div>
       </section>
@@ -613,7 +579,7 @@ export default function App() {
           </div>
 
           <div className="ai-grid stagger-group">
-            <GlowCard className="stagger-item" borderRadius={22} hover="s">
+            <div className="card stagger-item">
               <div className="ai-col-inner">
                 <div className="ai-tag">Before Consignd DataCore</div>
                 <h3>Data held together by tribal knowledge.</h3>
@@ -625,9 +591,9 @@ export default function App() {
                   <li><span className="x">✕</span>Every new automation is a one-off integration</li>
                 </ul>
               </div>
-            </GlowCard>
+            </div>
 
-            <GlowCard className="stagger-item" borderRadius={22} hover="s" glowColor={GLOW_ORANGE}>
+            <div className="card stagger-item">
               <div className="ai-col-inner">
                 <div className="ai-tag ai-tag-accent">With Consignd DataCore</div>
                 <h3>One governed record per load. Every field, every source.</h3>
@@ -639,7 +605,7 @@ export default function App() {
                   <li><span className="k">✓</span>Structured events for future automation: missing BOL, rate mismatch, late pickup</li>
                 </ul>
               </div>
-            </GlowCard>
+            </div>
           </div>
 
           <div className="ai-ready-schema reveal-scale">
@@ -664,13 +630,13 @@ export default function App() {
               { ico:'≡', title:'Trustworthy reporting',    body:"Dashboards become easier to trust because key fields trace back to the source document — not a spreadsheet someone rebuilt on Friday." },
               { ico:'↯', title:'Cleaner exception queues', body:'Missing BOL, rate mismatch, late pickup, unknown accessorial — route the exception instead of hunting through emails.' },
             ].map((c, i) => (
-              <GlowCard key={i} className="stagger-item" borderRadius={18} hover="s">
+              <div key={i} className="card stagger-item">
                 <div className="ai-use-card-inner">
                   <div className="ai-use-ico">{c.ico}</div>
                   <h4>{c.title}</h4>
                   <p>{c.body}</p>
                 </div>
-              </GlowCard>
+              </div>
             ))}
           </div>
         </div>
@@ -715,13 +681,13 @@ export default function App() {
                 icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6"/><path d="M12 7v5l3 2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/></svg>
               },
             ].map((col, i) => (
-              <GlowCard key={i} className="stagger-item" borderRadius={20} hover="m">
+              <div key={i} className="card stagger-item">
                 <div className="trust-col-inner">
                   <div className="trust-ico">{col.icon}</div>
                   <h3>{col.title}</h3>
                   <p>{col.body}</p>
                 </div>
-              </GlowCard>
+              </div>
             ))}
           </div>
         </div>

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { InlineWidget } from 'react-calendly'
 import GlowCard, { GLOW_BLUE, GLOW_ORANGE } from '../components/GlowCard'
-import Grainient from '../components/Grainient'
 import Logo from '../components/Logo'
 import './BookDemo.css'
 
@@ -187,33 +186,9 @@ export default function BookDemo() {
 
   return (
     <>
-      {/* ── Grainient background ── */}
+      {/* ── Quiet static background (was a WebGL gradient — CSS does the same job) ── */}
       <div className="book-bg">
-        <Grainient
-          color1="#0D1B3E"
-          color2="#1E40AF"
-          color3="#020B18"
-          timeSpeed={0.10}
-          colorBalance={-0.2}
-          warpStrength={0.55}
-          warpFrequency={3.5}
-          warpSpeed={1.0}
-          warpAmplitude={100.0}
-          blendAngle={15.0}
-          blendSoftness={0.12}
-          rotationAmount={320.0}
-          noiseScale={1.8}
-          grainAmount={0.045}
-          grainScale={1.8}
-          grainAnimated={false}
-          animated={false}
-          contrast={1.2}
-          gamma={1.05}
-          saturation={0.6}
-          zoom={0.82}
-        />
-        {/* darken overlay so content is readable */}
-        <div className="book-bg-overlay" />
+        <div className="book-bg-gradient" />
       </div>
 
       {/* ── Nav ── */}
@@ -286,7 +261,7 @@ export default function BookDemo() {
           <div className="book-grid">
 
             {/* Calendly card */}
-            <GlowCard className="book-calendly-card" borderRadius={24} glowColor={GLOW_BLUE} hover="s" backgroundColor="rgba(2,11,24,0.82)" glowRadius={36} glowIntensity={0.8}>
+            <GlowCard className="book-calendly-card" borderRadius={24} glowColor={GLOW_BLUE} hover="s" backgroundColor="rgba(11,14,19,0.85)" glowRadius={36} glowIntensity={0.8}>
               <div className="book-card-inner" id="calendly">
                 <div className="book-card-head">
                   <div>
@@ -311,10 +286,10 @@ export default function BookDemo() {
                     url={CALENDLY_URL}
                     styles={{ height: '660px', minWidth: '280px' }}
                     pageSettings={{
-                      backgroundColor: '020B18',
+                      backgroundColor: '0B0E13',
                       hideEventTypeDetails: true,
                       hideLandingPageDetails: true,
-                      primaryColor: '3B82F6',
+                      primaryColor: 'F26522',
                       textColor: 'ffffff',
                     }}
                   />
@@ -323,7 +298,7 @@ export default function BookDemo() {
             </GlowCard>
 
             {/* Contact form card */}
-            <GlowCard className="book-contact-card" borderRadius={24} glowColor={GLOW_ORANGE} hover="s" backgroundColor="rgba(2,11,24,0.82)" glowRadius={36} glowIntensity={0.8}>
+            <GlowCard className="book-contact-card" borderRadius={24} glowColor={GLOW_ORANGE} hover="s" backgroundColor="rgba(11,14,19,0.85)" glowRadius={36} glowIntensity={0.8}>
               <div className="book-card-inner" id="contact">
                 <div className="book-card-head">
                   <div>

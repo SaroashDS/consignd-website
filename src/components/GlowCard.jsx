@@ -11,7 +11,7 @@ export default function GlowCard({
   borderRadius = 22,
   glowColor = GLOW_BLUE,
   hover = 'm',
-  backgroundColor = 'rgba(2,11,24,0.78)',
+  backgroundColor = 'rgba(11,14,19,0.82)',
   glowRadius = 32,
   glowIntensity = 0.75,
   fillOpacity = 0.35,
