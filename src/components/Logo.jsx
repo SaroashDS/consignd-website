@@ -5,7 +5,7 @@ const Logo = () => (
       <rect x="13" y="0"  width="9" height="9" rx="2.5" fill="rgba(255,255,255,0.38)"/>
       <rect x="26" y="0"  width="8" height="9" rx="2.5" fill="rgba(255,255,255,0.14)"/>
       <rect x="0"  y="13" width="9" height="9" rx="2.5" fill="rgba(255,255,255,0.55)"/>
-      <rect x="26" y="13" width="8" height="9" rx="2.5" fill="#3B82F6"/>
+      <rect x="26" y="13" width="8" height="9" rx="2.5" fill="#F26522"/>
       <rect x="0"  y="26" width="9" height="8" rx="2.5" fill="rgba(255,255,255,0.92)"/>
       <rect x="13" y="26" width="9" height="8" rx="2.5" fill="rgba(255,255,255,0.38)"/>
       <rect x="26" y="26" width="8" height="8" rx="2.5" fill="rgba(255,255,255,0.14)"/>

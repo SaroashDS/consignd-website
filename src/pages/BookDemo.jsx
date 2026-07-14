@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { InlineWidget } from 'react-calendly'
-import GlowCard, { GLOW_BLUE, GLOW_ORANGE } from '../components/GlowCard'
 import Logo from '../components/Logo'
 import './BookDemo.css'
 
@@ -160,7 +159,7 @@ function ContactForm() {
         {status === 'sending' ? (
           <><span className="spinner" />Sending…</>
         ) : (
-          'Run the Document Audit →'
+          'Start the free audit →'
         )}
       </button>
       <p className="form-fine">We reply within one business day with the cleanest next step for the audit.</p>
@@ -173,7 +172,7 @@ export default function BookDemo() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    document.title = 'Run the Document Audit — Consignd'
+    document.title = 'Start the Free Document Audit — Consignd'
   }, [])
 
   useEffect(() => {
@@ -198,11 +197,11 @@ export default function BookDemo() {
             <Logo />
           </Link>
           <div className="nav-links">
-            <Link to="/#problem">Problem</Link>
-            <Link to="/#sources">What we ingest</Link>
-            <Link to="/#how">How it works</Link>
-            <Link to="/#audit">The pilot</Link>
-            <Link to="/#pricing">How pricing works</Link>
+            <Link to="/#flow">How it works</Link>
+            <Link to="/#problem">The problem</Link>
+            <Link to="/#voices">Voices</Link>
+            <Link to="/#audit">The audit</Link>
+            <Link to="/#faq">FAQ</Link>
           </div>
           <div className="nav-right">
             <Link to="/" className="btn btn-ghost nav-cta" style={{fontSize:'13px',padding:'9px 16px'}}>← Back to site</Link>
@@ -234,20 +233,20 @@ export default function BookDemo() {
               Currently running five-day document audits
             </span>
             <h1 className="book-h1">
-              Start with the Consignd Document Audit.{' '}
+              Start the free Document Audit.{' '}
               <span className="accent">See what your workflow is actually doing.</span>
             </h1>
             <p className="book-sub">
-              Send 25–50 real documents from the last two weeks of operations. We will map the document mix, extract the fields, identify review points, and show whether a managed rollout is worth it.
+              Send 25–50 real documents from the last two weeks of operations. We map the document mix, extract the fields, identify review points, and show whether a managed rollout is worth it. The audit is free: no engagement fee, no commitment, no pitch at the end.
             </p>
           </div>
 
           {/* What to expect strip */}
           <div className="book-expect">
             {[
+              { ico:'✓', text:'Free · no commitment' },
               { ico:'⏱', text:'5-business-day audit' },
               { ico:'📄', text:'25–50 docs is enough to start' },
-              { ico:'🧭', text:'Map fields, variation, and handoffs' },
               { ico:'📊', text:'Written findings + structured sample' },
             ].map((item, i) => (
               <div className="expect-item" key={i}>
@@ -261,7 +260,7 @@ export default function BookDemo() {
           <div className="book-grid">
 
             {/* Calendly card */}
-            <GlowCard className="book-calendly-card" borderRadius={24} glowColor={GLOW_BLUE} hover="s" backgroundColor="rgba(11,14,19,0.85)" glowRadius={36} glowIntensity={0.8}>
+            <div className="book-card book-calendly-card">
               <div className="book-card-inner" id="calendly">
                 <div className="book-card-head">
                   <div>
@@ -295,10 +294,10 @@ export default function BookDemo() {
                   />
                 </div>
               </div>
-            </GlowCard>
+            </div>
 
             {/* Contact form card */}
-            <GlowCard className="book-contact-card" borderRadius={24} glowColor={GLOW_ORANGE} hover="s" backgroundColor="rgba(11,14,19,0.85)" glowRadius={36} glowIntensity={0.8}>
+            <div className="book-card book-contact-card">
               <div className="book-card-inner" id="contact">
                 <div className="book-card-head">
                   <div>
@@ -320,7 +319,7 @@ export default function BookDemo() {
                 </div>
                 <ContactForm />
               </div>
-            </GlowCard>
+            </div>
 
           </div>
         </div>

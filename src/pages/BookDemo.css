@@ -6,9 +6,15 @@
 .book-bg-gradient {
   position: absolute; inset: 0;
   background:
-    radial-gradient(1000px 700px at 50% -15%, rgba(242,101,34,0.10), transparent 65%),
-    radial-gradient(800px 600px at 85% 110%, rgba(148,163,184,0.08), transparent 60%),
+    radial-gradient(1000px 700px at 50% -15%, rgba(255,255,255,0.05), transparent 65%),
     var(--bg);
+}
+
+/* flat card (replaces GlowCard) */
+.book-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
 }
 
 .book-main {
@@ -28,10 +34,7 @@
   margin: 20px auto 18px; max-width: 18ch;
   color: rgba(255,255,255,0.94);
 }
-.book-h1 .accent {
-  background: linear-gradient(90deg, #fb923c, #F26522);
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-}
+.book-h1 .accent { color: var(--accent); }
 .book-sub {
   max-width: 580px; margin: 0 auto; font-size: 17px; line-height: 1.6;
   color: rgba(255,255,255,0.6);
@@ -70,13 +73,13 @@
 }
 .book-card-label {
   font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-  font-weight: 700; color: var(--blue-bright);
+  font-weight: 700; color: var(--muted);
   padding: 5px 12px; border-radius: 999px;
-  background: rgba(148,163,184,0.1); border: 1px solid rgba(148,163,184,0.28);
+  background: rgba(255,255,255,0.05); border: 1px solid var(--line-strong);
   display: inline-block; margin-bottom: 4px;
 }
 .book-card-label-orange {
-  color: var(--orange);
+  color: var(--accent);
   background: rgba(242,101,34,0.1); border-color: rgba(242,101,34,0.28);
 }
 .book-card-title {
@@ -96,24 +99,21 @@
 }
 .chk-sm {
   width: 16px; height: 16px; border-radius: 5px; flex-shrink: 0;
-  background: rgba(148,163,184,0.18); border: 1px solid rgba(148,163,184,0.4);
+  background: rgba(255,255,255,0.06); border: 1px solid var(--line-strong);
   display: inline-flex; align-items: center; justify-content: center;
-  color: var(--blue-bright);
+  color: var(--text);
 }
 .chk-orange {
   background: rgba(242,101,34,0.15); border-color: rgba(242,101,34,0.4);
-  color: var(--orange);
+  color: var(--accent);
 }
 
 /* Calendly embed */
 .calendly-wrap {
   border-radius: 16px; overflow: hidden;
   border: 1px solid rgba(255,255,255,0.07);
-  background: rgba(2,11,24,0.6);
+  background: var(--surface-2);
   margin: 0 -4px; /* subtle bleed */
-}
-.book-calendly-card .border-glow-inner {
-  overflow: visible !important; /* let glow show */
 }
 
 /* Contact form */
@@ -159,7 +159,7 @@
   background-position: right 14px center;
   padding-right: 36px;
 }
-.form-select option { background: #0a1628; color: #fff; }
+.form-select option { background: #111; color: #fff; }
 .form-textarea { resize: vertical; min-height: 120px; }
 
 .form-submit {
@@ -196,7 +196,7 @@
 }
 .form-success h3 { margin: 0; font-size: 22px; font-weight: 700; }
 .form-success p { color: var(--muted); font-size: 14px; line-height: 1.6; margin: 0; max-width: 28ch; }
-.form-success a { color: var(--blue-bright); }
+.form-success a { color: var(--accent); }
 
 /* footer */
 .book-footer {
