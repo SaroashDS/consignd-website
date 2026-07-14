@@ -4,6 +4,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 import Logo from './components/Logo'
+import Aurora from './components/Aurora'
 
 gsap.registerPlugin(ScrollTrigger, MotionPathPlugin)
 
@@ -178,10 +179,10 @@ export default function App() {
 
   return (
     <>
-      {/* ── ambient background: grid + tracer beams ── */}
+      {/* ── ambient background: aurora + grid + tracer beams ── */}
       <div className="bg-fx" aria-hidden="true">
+        <Aurora colorStops={['#1E3A8A', '#3B82F6', '#60A5FA']} amplitude={1.0} blend={0.5} speed={0.5} />
         <div className="bg-grid" />
-        <div className="bg-glow" />
         <div className="bg-beam bg-beam-v" />
         <div className="bg-beam bg-beam-v2" />
         <div className="bg-beam bg-beam-h" />
