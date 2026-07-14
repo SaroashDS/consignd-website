@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { InlineWidget } from 'react-calendly'
 import Logo from '../components/Logo'
+import { useNavHighlight } from '../components/useNavHighlight'
 import './BookDemo.css'
 
 /* ─── Update this to your Calendly link ────────────────────────── */
@@ -170,6 +171,7 @@ function ContactForm() {
 /* ─── Page ──────────────────────────────────────────────────────── */
 export default function BookDemo() {
   const [menuOpen, setMenuOpen] = useState(false)
+  useNavHighlight()
 
   useEffect(() => {
     document.title = 'Start the Free Document Audit — Consignd'

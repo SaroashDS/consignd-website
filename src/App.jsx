@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 import Logo from './components/Logo'
 import Aurora from './components/Aurora'
+import { useNavHighlight } from './components/useNavHighlight'
 
 gsap.registerPlugin(ScrollTrigger, MotionPathPlugin)
 
@@ -34,6 +35,24 @@ const CheckIcon = () => (
     <path d="M1.5 5l2.5 2.5L8.5 2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 )
+const ArrowIcon = ({ className }) => (
+  <svg className={className} width="16" height="16" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor"/>
+  </svg>
+)
+
+/* FlowButton (ported from the shadcn/Tailwind snippet to plain CSS):
+   arrows slide through, text shifts, a circle of accent fills the pill */
+function FlowCta({ to, size = '', children, ...rest }) {
+  return (
+    <Link to={to} className={`btn-flow ${size}`} {...rest}>
+      <ArrowIcon className="arr arr-2" />
+      <span className="btn-flow-text">{children}</span>
+      <span className="btn-flow-circle" aria-hidden="true" />
+      <ArrowIcon className="arr arr-1" />
+    </Link>
+  )
+}
 
 /* ─── Voices — verbatim quotes from the ICP doc, cleared for website use ── */
 const voices = [
@@ -53,6 +72,7 @@ const TMS_ENTRIES = ['Rose Rocket', 'Alvys', 'Turvo', 'Tai TMS', 'McLeod']
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const flowRef = useRef(null)
+  useNavHighlight()
 
   useEffect(() => {
     document.title = 'Consignd — The Free Document Audit for Freight Brokers | Rate Cons, BOLs & PODs to Clean TMS Data'
@@ -165,6 +185,16 @@ export default function App() {
           opacity: 1, y: 0, stagger: 0.15, ease: 'none',
           scrollTrigger: { trigger: '.flow-out', start: 'top 92%', end: 'top 55%', scrub: 0.5 },
         })
+
+      /* POD and close cards land as their stage scrolls in */
+      root.querySelectorAll('.flow-late').forEach((card) => {
+        gsap.fromTo(card,
+          { opacity: 0, y: 22 },
+          {
+            opacity: 1, y: 0, ease: 'none',
+            scrollTrigger: { trigger: card, start: 'top 92%', end: 'top 60%', scrub: 0.5 },
+          })
+      })
     }, root)
 
     return () => ctx.revert()
@@ -202,7 +232,7 @@ export default function App() {
             <a href="#faq">FAQ</a>
           </div>
           <div className="nav-right">
-            <Link to="/book-demo" className="btn btn-primary nav-cta">Start the free audit →</Link>
+            <FlowCta to="/book-demo" size="btn-flow-sm nav-cta">Start the free audit</FlowCta>
             <button
               className={`hamburger${menuOpen ? ' open' : ''}`}
               onClick={() => setMenuOpen(v => !v)}
@@ -219,7 +249,7 @@ export default function App() {
           <a href="#voices" onClick={closeMenu}>Voices</a>
           <a href="#audit" onClick={closeMenu}>The audit</a>
           <a href="#faq" onClick={closeMenu}>FAQ</a>
-          <Link to="/book-demo" className="btn btn-primary" style={{width:'100%',justifyContent:'center',marginTop:'8px'}} onClick={closeMenu}>Start the free audit →</Link>
+          <FlowCta to="/book-demo" size="btn-flow-block" onClick={closeMenu}>Start the free audit</FlowCta>
         </div>
       </nav>
 
@@ -247,7 +277,7 @@ export default function App() {
             A person reviews exactly the fields that need it.
           </p>
           <div className="hero-ctas">
-            <Link to="/book-demo" className="btn btn-primary btn-lg">Start the free audit →</Link>
+            <FlowCta to="/book-demo" size="btn-flow-lg">Start the free audit</FlowCta>
             <a href="#flow" className="btn btn-ghost btn-lg">See how it works</a>
           </div>
 
@@ -274,20 +304,18 @@ export default function App() {
             <span className="kicker">How it works</span>
             <h2>Chaos in. Order out.</h2>
             <p className="section-sub">
-              Follow one load through the layer: four documents from four channels,
-              one governed record, one human decision where the data disagrees.
+              Follow one load through the layer: rate con and BOL in, one approved
+              record out. Then the POD, the invoice, and a closed load.
             </p>
           </div>
 
           <div className="flow">
-            {/* Stage 1 — scattered sources */}
-            <div className="flow-stage-label">01 · Documents arrive anywhere</div>
-            <div className="flow-sources">
+            {/* Stage 1 — documents arrive */}
+            <div className="flow-stage-label">01 · Rate con and BOL arrive</div>
+            <div className="flow-sources flow-sources-2">
               {[
-                { ico:<IcoMail />,   chan:'email',    name:'rate_con.pdf',        a:'Laredo → Chicago',   b:'$2,850 · MC-884213' },
-                { ico:<IcoChat />,   chan:'whatsapp', name:'pod_photo.jpg',       a:'Delivered 04/25',    b:'Signed · 14:06' },
-                { ico:<IcoGlobe />,  chan:'portal',   name:'carrier_invoice.pdf', a:'Accessorial added',  b:'$3,025 · $175 detention' },
-                { ico:<IcoCamera />, chan:'photo',    name:'bol_scan.jpg',        a:'Auto Parts',         b:'38,200 lb' },
+                { ico:<IcoMail />,   chan:'email', name:'rate_con.pdf', a:'Laredo → Chicago',  b:'$2,850 · 36,000 lb · MC-884213' },
+                { ico:<IcoCamera />, chan:'photo', name:'bol_scan.jpg', a:'Auto Parts',        b:'Scale ticket · 38,200 lb' },
               ].map((d, i) => (
                 <div key={d.name} className={`flow-card src-card src-card-${i + 1}`}>
                   <div className="src-top"><span className="src-ico">{d.ico}</span><span className="src-chan">{d.chan}</span></div>
@@ -298,19 +326,17 @@ export default function App() {
               ))}
             </div>
 
-            {/* Connector: 4 → 1 */}
+            {/* Connector: 2 → 1 */}
             <div className="flow-connector flow-connector-fan" aria-hidden="true">
               <svg viewBox="0 0 800 130" preserveAspectRatio="none">
-                <path className="flow-path" d="M100 0 C100 85, 400 45, 400 130" />
-                <path className="flow-path" d="M300 0 C300 75, 400 55, 400 130" />
-                <path className="flow-path" d="M500 0 C500 75, 400 55, 400 130" />
-                <path className="flow-path" d="M700 0 C700 85, 400 45, 400 130" />
+                <path className="flow-path" d="M210 0 C210 85, 400 45, 400 130" />
+                <path className="flow-path" d="M590 0 C590 85, 400 45, 400 130" />
               </svg>
               <div className="vline" />
             </div>
 
-            {/* Stage 2 — DataCore */}
-            <div className="flow-stage-label">02 · One record, every field source-linked</div>
+            {/* Stage 2 — load record */}
+            <div className="flow-stage-label">02 · Load record created, every field source-linked</div>
             <div className="flow-card dc-card">
               <div className="dc-head">
                 <Logo />
@@ -319,20 +345,20 @@ export default function App() {
               {[
                 ['pickup',     'Laredo, TX · 04/23 08:00',   '→ rate_con.pdf'],
                 ['delivery',   'Chicago, IL · 04/25 14:00',  '→ rate_con.pdf'],
-                ['commodity',  'Auto Parts · 38,200 lb',     '→ bol_scan.jpg'],
-                ['carrier_mc', 'MC-884213',                  '→ email'],
+                ['rate_usd',   '2,850.00',                   '→ rate_con.pdf'],
+                ['carrier_mc', 'MC-884213',                  '→ rate_con.pdf'],
               ].map(([f, v, s]) => (
                 <div className="dc-row" key={f}>
                   <b>{f}</b><span>{v}</span><span className="src">{s}</span>
                 </div>
               ))}
               <div className="dc-row flagged">
-                <b>rate_usd</b><span>2,850.00 ≠ 3,025.00</span><span className="src">→ 2 sources</span>
+                <b>weight_lb</b><span>38,200 ≠ 36,000</span><span className="src">→ 2 sources</span>
               </div>
               <div className="dc-foot">4 of 5 fields extracted clean · 1 flagged for a person</div>
             </div>
 
-            {/* Connector: through the review gate */}
+            {/* Connector: through the approval gate */}
             <div className="flow-connector flow-connector-gate" aria-hidden="true">
               <svg viewBox="0 0 800 110" preserveAspectRatio="none">
                 <path id="gatePath" className="flow-path" d="M400 0 L400 110" />
@@ -340,17 +366,17 @@ export default function App() {
               <span className="flow-pulse" />
             </div>
 
-            {/* Stage 3 — human review gate */}
-            <div className="flow-stage-label">03 · A person decides, not a guess</div>
+            {/* Stage 3 — human approval gate */}
+            <div className="flow-stage-label">03 · A person approves, not a guess</div>
             <div className="flow-card gate-card">
-              <div className="gate-title">Human review · rate mismatch</div>
+              <div className="gate-title">Approval gate · weight mismatch</div>
               <p className="gate-body">
-                The rate con shows $2,850. The carrier invoice shows $3,025.
-                The difference is a $175 detention accessorial added after delivery.
+                The BOL scale ticket shows 38,200 lb. The rate con was booked at 36,000 lb.
+                A person confirms which number is billable before anything reaches your TMS.
               </p>
               <div className="gate-actions">
-                <span className="act primary">Accept rate con</span>
-                <span className="act">Accept invoice</span>
+                <span className="act primary">Accept BOL weight</span>
+                <span className="act">Keep rate con</span>
                 <span className="act">Send to triage</span>
               </div>
             </div>
@@ -364,15 +390,15 @@ export default function App() {
               <div className="vline" />
             </div>
 
-            {/* Stage 4 — outputs */}
-            <div className="flow-stage-label">04 · Delivered where your team works</div>
+            {/* Stage 4 — TMS + warehouse */}
+            <div className="flow-stage-label">04 · Written to your TMS · warehoused</div>
             <div className="flow-out">
               <div className="flow-card out-card">
                 <div className="out-title">Your TMS</div>
                 {[
-                  ['→ Review queue', 'ready'],
-                  ['→ CSV / import file', 'clean'],
-                  ['→ TMS write-back', 'where supported'],
+                  ['load CN-48219', 'created'],
+                  ['→ Review queue', 'approved'],
+                  ['→ CSV / write-back', 'where supported'],
                 ].map(([k, v]) => (
                   <div className="out-row" key={k}><b>{k}</b><span>{v}</span></div>
                 ))}
@@ -383,17 +409,61 @@ export default function App() {
                 {[
                   ['every field', 'linked to its source doc'],
                   ['every load', 'queryable history'],
-                  ['exceptions', 'missing BOL · rate mismatch'],
+                  ['exceptions', 'awaiting POD · invoice open'],
                 ].map(([k, v]) => (
                   <div className="out-row" key={k}><b>{k}</b><span>{v}</span></div>
                 ))}
                 <div className="out-foot">The data layer later automation builds on.</div>
               </div>
             </div>
+
+            {/* Connector: down to the follow-up sequence */}
+            <div className="flow-connector flow-connector-merge" aria-hidden="true">
+              <svg viewBox="0 0 800 110" preserveAspectRatio="none">
+                <path className="flow-path" d="M195 0 C195 60, 400 45, 400 110" />
+                <path className="flow-path" d="M605 0 C605 60, 400 45, 400 110" />
+              </svg>
+              <div className="vline" />
+            </div>
+
+            {/* Stage 5 — POD follow-up */}
+            <div className="flow-stage-label">05 · The POD follows up and matches in</div>
+            <div className="flow-card out-card flow-late">
+              <div className="out-title"><span className="src-ico"><IcoChat /></span>pod_photo.jpg · whatsapp</div>
+              {[
+                ['delivered', 'Chicago, IL · 04/25 14:06'],
+                ['signed', 'legible · matched to CN-48219'],
+                ['status', 'delivered — days before anyone would have chased it'],
+              ].map(([k, v]) => (
+                <div className="out-row" key={k}><b>{k}</b><span>{v}</span></div>
+              ))}
+              <div className="out-foot">Order-independent matching: whichever document lands first seeds the load.</div>
+            </div>
+
+            {/* Connector: to close */}
+            <div className="flow-connector flow-connector-gate" aria-hidden="true">
+              <svg viewBox="0 0 800 110" preserveAspectRatio="none">
+                <path className="flow-path" d="M400 0 L400 110" />
+              </svg>
+            </div>
+
+            {/* Stage 6 — invoice matched, load closed */}
+            <div className="flow-stage-label">06 · Invoice matched · load closed</div>
+            <div className="flow-card out-card flow-late close-card">
+              <div className="out-title"><span className="src-ico"><IcoGlobe /></span>carrier_invoice.pdf · portal</div>
+              {[
+                ['invoice', '$3,025.00'],
+                ['rate con', '$2,850.00'],
+                ['difference', '$175 detention · documented, not disputed blind'],
+              ].map(([k, v]) => (
+                <div className="out-row" key={k}><b>{k}</b><span>{v}</span></div>
+              ))}
+              <div className="out-foot close-foot">load.closed ✓ — every number traceable back to its source document</div>
+            </div>
           </div>
 
           <p className="flow-caption reveal">
-            Deterministic where the data allows it. A person reviews it where the data doesn’t.
+            Deterministic where the data allows it. A person approves it where the data doesn’t.
           </p>
         </div>
       </section>
@@ -508,7 +578,7 @@ export default function App() {
                 <li key={item}><span className="chk"><CheckIcon /></span>{item}</li>
               ))}
             </ul>
-            <Link to="/book-demo" className="btn btn-primary btn-lg">Start the free audit →</Link>
+            <FlowCta to="/book-demo" size="btn-flow-lg">Start the free audit</FlowCta>
           </div>
         </div>
       </section>
@@ -547,7 +617,7 @@ export default function App() {
             You’ll know what extracts cleanly, what needs a person, and whether
             rollout is worth it. Before you spend a dollar.
           </p>
-          <Link to="/book-demo" className="btn btn-primary btn-lg">Start the free audit →</Link>
+          <FlowCta to="/book-demo" size="btn-flow-lg">Start the free audit</FlowCta>
         </div>
       </section>
 
