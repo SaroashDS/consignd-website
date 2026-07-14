@@ -288,7 +288,7 @@ export default function BookDemo() {
                       backgroundColor: '0B0E13',
                       hideEventTypeDetails: true,
                       hideLandingPageDetails: true,
-                      primaryColor: 'F26522',
+                      primaryColor: '3B82F6',
                       textColor: 'ffffff',
                     }}
                   />

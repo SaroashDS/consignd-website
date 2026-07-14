@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -44,7 +44,9 @@ const voices = [
   { q: '“Filters don’t provide flexibility for business-specific reports.”', src: 'Rose Rocket user, Capterra' },
 ]
 
-const TMS_ENTRIES = ['Rose Rocket', 'Alvys', 'Turvo', 'McLeod', 'Tai TMS', 'AscendTMS']
+/* TMS platforms with mature public APIs — text + neutral monogram only
+   (logo lookalikes were removed for trademark reasons; don't reintroduce) */
+const TMS_ENTRIES = ['Rose Rocket', 'Alvys', 'Turvo', 'Tai TMS', 'McLeod']
 
 /* ─── App ───────────────────────────────────────────────────────── */
 export default function App() {
@@ -176,6 +178,15 @@ export default function App() {
 
   return (
     <>
+      {/* ── ambient background: grid + tracer beams ── */}
+      <div className="bg-fx" aria-hidden="true">
+        <div className="bg-grid" />
+        <div className="bg-glow" />
+        <div className="bg-beam bg-beam-v" />
+        <div className="bg-beam bg-beam-v2" />
+        <div className="bg-beam bg-beam-h" />
+      </div>
+
       {/* ── Nav ── */}
       <nav className="nav" id="nav">
         <div className="nav-inner">
@@ -218,7 +229,16 @@ export default function App() {
             <span className="dot"></span>The free five-day Document Audit for freight brokers
           </span>
           <h1>
-            Your dispatchers should be <em>closing loads.</em> Not typing them.
+            {[
+              ['Your'], ['dispatchers'], ['should'], ['be'],
+              ['closing', 'em'], ['loads.', 'em'],
+              ['Not'], ['typing'], ['them.'],
+            ].map(([w, cls], i) => (
+              <Fragment key={i}>
+                <span className={`w${cls ? ' em' : ''}`} style={{ '--i': i }}>{w}</span>
+                {' '}
+              </Fragment>
+            ))}
           </h1>
           <p className="sub">
             Rate cons, BOLs, and PODs arrive by email, WhatsApp, and portal.
@@ -449,7 +469,15 @@ export default function App() {
           </p>
           <div className="tms-strip reveal">
             <span className="tms-label">Works around the TMS you already run</span>
-            {TMS_ENTRIES.map((t) => <span className="tms-chip" key={t}>{t}</span>)}
+            <div className="tms-marquee" role="list" aria-label="Supported TMS platforms">
+              <div className="tms-track">
+                {[...TMS_ENTRIES, ...TMS_ENTRIES, ...TMS_ENTRIES].map((t, i) => (
+                  <span className="tms-chip" role={i < TMS_ENTRIES.length ? 'listitem' : 'presentation'} aria-hidden={i >= TMS_ENTRIES.length} key={i}>
+                    <b className="tms-ico" aria-hidden="true">{t[0]}</b>{t}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -491,7 +519,7 @@ export default function App() {
             <span className="kicker">FAQ</span>
             <h2>What ops leaders ask before sending documents.</h2>
           </div>
-          <div className="faq-grid reveal">
+          <div className="faq-list reveal">
             {[
               ['What is the Consignd Document Audit?', 'A free five-day diagnostic. You send 25–50 real documents (rate confirmations, BOLs, PODs) and receive a written report showing what extracts cleanly, what needs human review, and whether a managed rollout is commercially worth it.'],
               ['Do I have to replace my TMS?', 'No. Consignd works around your existing TMS. Clean records are delivered as a review queue, CSV, import-ready file, or written into your TMS workflow where access allows.'],
@@ -499,11 +527,11 @@ export default function App() {
               ['What happens when extraction isn’t sure?', 'Low-confidence fields are flagged and routed to a human review queue. Nothing is silently guessed, and every field links back to the exact source document it came from.'],
               ['What if documents arrive out of order?', 'Matching is order-independent: a BOL can arrive days before its rate con. Whichever document lands first seeds the load; later documents match into it. Unmatched documents go to a triage queue — never dropped, never force-matched.'],
               ['How much does it cost?', 'The five-day Document Audit is free. No engagement fee, no commitment, no pitch at the end. If the workflow proves repeatable, rollout is a one-time setup plus monthly managed processing priced by document volume and complexity. If it doesn’t prove out, we tell you that in the report.'],
-            ].map(([q, a]) => (
-              <div className="faq-item" key={q}>
-                <h3>{q}</h3>
-                <p>{a}</p>
-              </div>
+            ].map(([q, a], i) => (
+              <details className="faq-item" key={q} open={i === 0}>
+                <summary>{q}</summary>
+                <div className="faq-a"><p>{a}</p></div>
+              </details>
             ))}
           </div>
         </div>
