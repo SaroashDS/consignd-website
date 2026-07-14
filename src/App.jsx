@@ -257,7 +257,7 @@ export default function App() {
       <section className="hero">
         <div className="wrap hero-content">
           <span className="hero-eyebrow">
-            <span className="dot"></span>The free five-day Document Audit for freight brokers
+            <span className="dot"></span>The unified data layer for freight brokers
           </span>
           <h1>
             {[
