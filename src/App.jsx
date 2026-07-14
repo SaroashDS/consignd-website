@@ -329,8 +329,8 @@ export default function App() {
             {/* Connector: 2 → 1 */}
             <div className="flow-connector flow-connector-fan" aria-hidden="true">
               <svg viewBox="0 0 800 130" preserveAspectRatio="none">
-                <path className="flow-path" d="M210 0 C210 85, 400 45, 400 130" />
-                <path className="flow-path" d="M590 0 C590 85, 400 45, 400 130" />
+                <path className="flow-path" d="M250 0 C250 85, 400 45, 400 130" />
+                <path className="flow-path" d="M550 0 C550 85, 400 45, 400 130" />
               </svg>
               <div className="vline" />
             </div>
